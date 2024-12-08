@@ -1,0 +1,35 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/barcodeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="바코드 번호: 없음"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/nutritionInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="선택된 영양정보가 없습니다."
+        android:textSize="16sp"
+        android:layout_marginBottom="32dp" />
+
+    <Button
+        android:id="@+id/brailleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="점자로 변환" />
+
+    <Button
+        android:id="@+id/speechButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="음성으로 읽기" />
+</LinearLayout>

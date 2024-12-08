@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:background="@color/background_light">
+
+    <!-- 영양정보 텍스트뷰 -->
+    <TextView
+        android:id="@+id/nutritionInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="선택한 영양정보가 여기에 표시됩니다."
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_background"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <!-- 알레르기 정보 텍스트뷰 -->
+    <TextView
+        android:id="@+id/allergyInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="선택한 알레르기: 없음"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:background="@drawable/rounded_background"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 바코드 스캔 버튼 -->
+    <Button
+        android:id="@+id/scanButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="바코드 스캔"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="12dp"
+        android:backgroundTint="@color/primary"
+        android:textColor="@color/button_text"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 영양정보 수정 버튼 -->
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="영양정보 수정"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="12dp"
+        android:backgroundTint="@color/accent"
+        android:textColor="@color/button_text"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 알레르기 수정 버튼 -->
+    <Button
+        android:id="@+id/editAllergyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="알레르기 수정"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="12dp"
+        android:backgroundTint="@color/accent"
+        android:textColor="@color/button_text" />
+</LinearLayout>
