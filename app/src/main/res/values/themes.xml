@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- AppCompat 테마 -->
+    <style name="Theme.NutritionRealtimeApp" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+
+    <!-- 버튼 스타일 -->
+    <style name="PrimaryButton">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/text_secondary</item> <!-- 텍스트 색상 -->
+        <item name="android:backgroundTint">@color/primary</item> <!-- 배경 색상 -->
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>
