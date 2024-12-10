@@ -48,6 +48,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         Button scanButton = findViewById(R.id.scanButton);
         Button editButton = findViewById(R.id.editButton);
         Button editAllergyButton = findViewById(R.id.editAllergyButton);
+        Button scanAllergyButton = findViewById(R.id.scanAllergyButton);
 
         // SharedPreferences에서 데이터 로드
         selectedNutritionInfo = new ArrayList<>(sharedPreferences.getStringSet("selectedNutritionInfo", new HashSet<>()));
@@ -87,6 +88,12 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             Intent intent = new Intent(ScanBarcodeActivity.this, SelectAllergiesActivity.class);
             startActivity(intent);
             finish();
+        });
+
+        // 알레르기 스캔 버튼 클릭 이벤트
+        scanAllergyButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ScanBarcodeActivity.this, ScanAllergyActivity.class);
+            startActivity(intent);
         });
     }
 

@@ -67,4 +67,11 @@
         android:padding="12dp"
         android:backgroundTint="@color/accent"
         android:textColor="@color/button_text" />
+
+    <Button
+        android:id="@+id/scanAllergyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="알러지 확인하기"
+        android:layout_marginTop="20dp" />
 </LinearLayout>
