@@ -18,7 +18,7 @@ import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions;
 
 public class ScanAllergyActivity extends AppCompatActivity {
 
@@ -59,7 +59,7 @@ public class ScanAllergyActivity extends AppCompatActivity {
 
     private void processImage(Bitmap bitmap) {
         InputImage image = InputImage.fromBitmap(bitmap, 0);
-        TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+        TextRecognizer recognizer = TextRecognition.getClient(new KoreanTextRecognizerOptions.Builder().build());
 
         recognizer.process(image)
                 .addOnSuccessListener(this::displayText)

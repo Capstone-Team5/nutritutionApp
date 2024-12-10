@@ -78,5 +78,5 @@ dependencies {
     implementation 'com.google.mlkit:text-recognition:16.0.0'
 
     // 한국어 text recognition
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta5'
+    implementation 'com.google.mlkit:text-recognition-korean:16.0.0'
 }
