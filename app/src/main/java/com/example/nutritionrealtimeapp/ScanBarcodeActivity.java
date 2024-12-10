@@ -1,8 +1,11 @@
 package com.example.nutritionrealtimeapp;
 
+dimport android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,11 +16,17 @@ import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
-
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import android.speech.tts.TextToSpeech;
+import java.util.Locale;
+
 
 public class ScanBarcodeActivity extends AppCompatActivity {
 
@@ -25,7 +34,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     private List<String> selectedAllergies;
     private FirebaseFirestore firestore;
     private SharedPreferences sharedPreferences;
-
+    private TextToSpeech textToSpeech;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +52,12 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         // SharedPreferences에서 데이터 로드
         selectedNutritionInfo = new ArrayList<>(sharedPreferences.getStringSet("selectedNutritionInfo", new HashSet<>()));
         selectedAllergies = new ArrayList<>(sharedPreferences.getStringSet("selectedAllergies", new HashSet<>()));
+
+        textToSpeech = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.setLanguage(Locale.getDefault()); // 디바이스의 기본 언어로 설정
+            }
+        });
 
         // 영양정보와 알레르기 정보를 화면에 표시
         if (!selectedNutritionInfo.isEmpty()) {
@@ -109,6 +124,31 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     Toast.makeText(this, "스캔 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+    
+    private void checkAllergies(String recognizedText) {
+        if (recognizedText != null && selectedAllergies != null) {
+            for (String allergy : selectedAllergies) {
+                if (recognizedText.contains(allergy)) {
+                    String alertMessage = "주의: " + allergy + "가 포함되었습니다!";
+
+                    // TTS로 알림
+                    if (textToSpeech != null) {
+                        textToSpeech.speak(alertMessage, TextToSpeech.QUEUE_FLUSH, null, null);
+                    }
+
+                    // 토스트 메시지 추가
+                    Toast.makeText(this, alertMessage, Toast.LENGTH_LONG).show();
+
+                    // 점자(진동) 알림 추가
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    if (vibrator != null && vibrator.hasVibrator()) {
+                        vibrator.vibrate(500); // 500ms 동안 진동
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
     private void saveToFirestore(String barcodeValue) {
         if (selectedNutritionInfo == null || selectedNutritionInfo.isEmpty()) {
@@ -132,5 +172,12 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "데이터 저장 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+    protected void onDestroy() {
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
+        super.onDestroy();
     }
 }
