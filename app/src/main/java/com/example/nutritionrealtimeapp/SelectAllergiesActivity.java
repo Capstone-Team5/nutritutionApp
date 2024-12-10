@@ -54,9 +54,7 @@ public class SelectAllergiesActivity extends AppCompatActivity {
             if (checkBoxDairy.isChecked()) selectedAllergies.add("우유");
             if (checkBoxGluten.isChecked()) selectedAllergies.add("글루틴");
 
-            if (selectedAllergies.isEmpty()) {
-                Toast.makeText(this, "최소한 하나의 알레르기를 선택하세요!", Toast.LENGTH_SHORT).show();
-            } else {
+
                 // Firestore에 저장할 데이터 준비
                 HashMap<String, Object> allergyData = new HashMap<>();
                 allergyData.put("allergies", selectedAllergies);
@@ -77,7 +75,6 @@ public class SelectAllergiesActivity extends AppCompatActivity {
                             finish(); // 현재 액티비티 종료
                         })
                         .addOnFailureListener(e -> Toast.makeText(this, "저장 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }
         });
     }
 
