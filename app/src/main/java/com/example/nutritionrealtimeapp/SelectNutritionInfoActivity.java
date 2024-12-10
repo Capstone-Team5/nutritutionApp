@@ -1,5 +1,6 @@
 package com.example.nutritionrealtimeapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,12 +9,19 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class SelectNutritionInfoActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPreferences;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +34,14 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
         CheckBox checkBoxCarbs = findViewById(R.id.checkBox_carbs);
         Button saveButton = findViewById(R.id.saveButton);
 
-        // SharedPreferences에서 이전 선택값 가져오기
-        SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
-        Set<String> savedNutritionInfoSet = sharedPreferences.getStringSet("selectedNutritionInfo", null);
+        // Firestore 초기화
+        db = FirebaseFirestore.getInstance();
 
-        // 저장된 값이 있으면 체크박스에 반영
+        // SharedPreferences 초기화
+        sharedPreferences = getSharedPreferences("NutritionApp", Context.MODE_PRIVATE);
+
+        // 저장된 값이 있으면 체크박스 상태 복원
+        Set<String> savedNutritionInfoSet = sharedPreferences.getStringSet("selectedNutritionInfo", null);
         if (savedNutritionInfoSet != null) {
             if (savedNutritionInfoSet.contains("칼로리")) checkBoxCalories.setChecked(true);
             if (savedNutritionInfoSet.contains("단백질")) checkBoxProtein.setChecked(true);
@@ -38,28 +49,65 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
             if (savedNutritionInfoSet.contains("탄수화물")) checkBoxCarbs.setChecked(true);
         }
 
+        // 유저 ID 생성/불러오기
+        String userId = getOrCreateUserId();
+
         // 저장 버튼 클릭 이벤트
         saveButton.setOnClickListener(v -> {
-            Set<String> selectedNutritionInfoSet = new HashSet<>();
-            if (checkBoxCalories.isChecked()) selectedNutritionInfoSet.add("칼로리");
-            if (checkBoxProtein.isChecked()) selectedNutritionInfoSet.add("단백질");
-            if (checkBoxFat.isChecked()) selectedNutritionInfoSet.add("지방");
-            if (checkBoxCarbs.isChecked()) selectedNutritionInfoSet.add("탄수화물");
+            List<String> selectedNutritionInfo = new ArrayList<>();
+            if (checkBoxCalories.isChecked()) selectedNutritionInfo.add("칼로리");
+            if (checkBoxProtein.isChecked()) selectedNutritionInfo.add("단백질");
+            if (checkBoxFat.isChecked()) selectedNutritionInfo.add("지방");
+            if (checkBoxCarbs.isChecked()) selectedNutritionInfo.add("탄수화물");
 
-            if (selectedNutritionInfoSet.isEmpty()) {
+            if (selectedNutritionInfo.isEmpty()) {
                 Toast.makeText(this, "최소한 하나의 영양정보를 선택하세요!", Toast.LENGTH_SHORT).show();
             } else {
-                // SharedPreferences에 선택한 데이터 저장
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putStringSet("selectedNutritionInfo", selectedNutritionInfoSet);
-                editor.apply();
+                // Firestore에 저장할 데이터 준비
+                HashMap<String, Object> nutritionData = new HashMap<>();
+                nutritionData.put("nutritionInfo", selectedNutritionInfo);
 
-                // 선택한 데이터를 ScanBarcodeActivity로 전달하고 이동
-                Intent intent = new Intent(this, ScanBarcodeActivity.class);
-                intent.putStringArrayListExtra("selectedNutritionInfo", new ArrayList<>(selectedNutritionInfoSet));
-                startActivity(intent);
-                finish(); // 현재 액티비티 종료
+                // Firestore에 데이터 저장
+                db.collection("nutritionInfo").document(userId)
+                        .set(nutritionData)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(this, "영양정보 저장 완료!", Toast.LENGTH_SHORT).show();
+
+                            // SharedPreferences에 선택한 데이터 저장
+                            saveNutritionInfoToPreferences(selectedNutritionInfo);
+
+                            // ScanBarcodeActivity로 이동
+                            Intent intent = new Intent(SelectNutritionInfoActivity.this, ScanBarcodeActivity.class);
+                            intent.putStringArrayListExtra("selectedNutritionInfo", (ArrayList<String>) selectedNutritionInfo);
+                            startActivity(intent);
+                            finish(); // 현재 액티비티 종료
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(this, "저장 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
+    }
+
+    // SharedPreferences에 UUID 저장 및 불러오기
+    private String getOrCreateUserId() {
+        String userId = sharedPreferences.getString("userId", null);
+
+        if (userId == null) {
+            // UUID 생성
+            userId = UUID.randomUUID().toString();
+
+            // SharedPreferences에 저장
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("userId", userId);
+            editor.apply();
+        }
+
+        return userId;
+    }
+
+    // SharedPreferences에 영양 정보를 저장
+    private void saveNutritionInfoToPreferences(List<String> selectedNutritionInfo) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet("selectedNutritionInfo", new HashSet<>(selectedNutritionInfo));
+        editor.apply();
     }
 }

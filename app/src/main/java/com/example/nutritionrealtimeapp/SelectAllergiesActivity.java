@@ -60,7 +60,7 @@ public class SelectAllergiesActivity extends AppCompatActivity {
                 allergyData.put("allergies", selectedAllergies);
 
                 // Firestore에 데이터 저장
-                db.collection("Users").document(userId)
+                db.collection("Allergies").document(userId)
                         .set(allergyData)
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(this, "알레르기 저장 완료!", Toast.LENGTH_SHORT).show();
@@ -68,8 +68,8 @@ public class SelectAllergiesActivity extends AppCompatActivity {
                             // SharedPreferences에 알레르기 데이터 저장
                             saveAllergiesToPreferences(selectedAllergies);
 
-                            // ScanBarcodeActivity로 이동
-                            Intent intent = new Intent(SelectAllergiesActivity.this, ScanBarcodeActivity.class);
+                            // SelectNutritionInfoActivity로 이동
+                            Intent intent = new Intent(SelectAllergiesActivity.this, SelectNutritionInfoActivity.class);
                             intent.putStringArrayListExtra("selectedAllergies", (ArrayList<String>) selectedAllergies);
                             startActivity(intent);
                             finish(); // 현재 액티비티 종료
