@@ -1,50 +1,45 @@
 package com.example.nutritionrealtimeapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Vibrator;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Xml;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nutritionrealtimeapp.DisplayNutritionActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.text.Text;
-import com.google.mlkit.vision.text.TextRecognition;
-import com.google.mlkit.vision.text.TextRecognizer;
-import android.os.AsyncTask; // AsyncTask 클래스
-import java.io.BufferedReader; // 네트워크 응답 읽기
-import java.io.InputStreamReader; // 입력 스트림 처리
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection; // HTTP 요청 처리
-import java.net.URL; // URL 처리
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import android.speech.tts.TextToSpeech;
-
-import org.xmlpull.v1.XmlPullParser;
-
 import java.util.Locale;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ScanBarcodeActivity extends AppCompatActivity {
@@ -54,7 +49,9 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private SharedPreferences sharedPreferences;
     private TextToSpeech textToSpeech;
-    private String nutritionApiKey = ""; // 영양 정보 API 키
+    private String nutritionApiKey = "zblpVQX%2B75IpUWic%2BfeIY7TaV1DCNu8qOPWmVR2AUqYKrsB%2BNM6wYv1pjWczB0%2FK2TNlTq%2FOmaZ67dSEImlQeQ%3D%3D"; // 영양 정보 API 키
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +115,6 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
     private void startBarcodeScanner() {
         GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
                 .setBarcodeFormats(
@@ -134,9 +130,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     String rawValue = barcode.getRawValue();
                     if (rawValue != null) {
                         Toast.makeText(this, "바코드 스캔 성공: " + rawValue, Toast.LENGTH_SHORT).show();
-
-                        // 1. 바코드로 식품 정보를 가져옵니다.
-                        new FetchFoodTask().execute(rawValue);
+                        executorService.execute(new FetchFoodRunnable(rawValue));
                     }
                 })
                 .addOnCanceledListener(() -> {
@@ -146,250 +140,357 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     Toast.makeText(this, "스캔 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-    private String extractFoodNameFromResponse(String xmlResponse) {
+
+    /**
+     * XML 응답에서 여러 개의 식품 이름을 추출하는 메서드
+     */
+    private String extractFoodNameFromResponse(String jsonResponse) {
         try {
-            // XML 파서 준비
+            // JSON 파싱 시작
+            JSONObject rootObject = new JSONObject(jsonResponse);
+
+            // "C005" 객체 확인
+            if (!rootObject.has("C005")) {
+                Log.e("JSON_PARSING_ERROR", "C005 object not found.");
+                return null; // "C005"가 없으면 null 반환
+            }
+            JSONObject c005Object = rootObject.getJSONObject("C005");
+
+            // "row" 배열 확인
+            if (!c005Object.has("row")) {
+                Log.e("JSON_PARSING_ERROR", "Row array is not found in C005.");
+                return null; // "row" 배열이 없으면 null 반환
+            }
+            JSONArray rowArray = c005Object.getJSONArray("row");
+
+            if (rowArray.length() == 0) {
+                Log.e("JSON_PARSING_ERROR", "Row array is empty.");
+                return null; // "row" 배열이 비어 있으면 null 반환
+            }
+
+            // 첫 번째 아이템의 "PRDLST_NM" 추출
+            JSONObject firstItem = rowArray.getJSONObject(0);
+            if (!firstItem.has("PRDLST_NM")) {
+                Log.e("JSON_PARSING_ERROR", "PRDLST_NM key not found in first item.");
+                return null; // "PRDLST_NM" 키가 없으면 null 반환
+            }
+            String foodName = firstItem.getString("PRDLST_NM");
+
+            if (foodName.isEmpty()) {
+                Log.e("JSON_PARSING_ERROR", "PRDLST_NM is empty.");
+                return null; // "PRDLST_NM" 값이 비어 있으면 null 반환
+            }
+
+            Log.d("EXTRACTED_FOOD_NAME", "Food name: " + foodName);
+            return foodName;
+
+        } catch (Exception e) {
+            Log.e("JSON_PARSING_ERROR", "Error parsing JSON response: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String extractActualFoodName(String fullName) {
+        if (fullName.contains("_")) {
+            String[] parts = fullName.split("_");
+            return parts[parts.length - 1]; // 마지막 부분 반환
+        }
+        return fullName; // 언더스코어가 없으면 원래 값 반환
+    }
+    /**
+     * 결과 객체를 정의하여 성공과 오류를 명확히 구분
+     */
+    private class FetchResult {
+        String foodName;
+        String nutritionInfo;
+        String errorMessage;
+
+        FetchResult(String foodName, String nutritionInfo) {
+            this.foodName = foodName;
+            this.nutritionInfo = nutritionInfo;
+        }
+
+        FetchResult(String errorMessage) {
+            this.errorMessage = errorMessage;
+        }
+    }
+
+    /**
+     * 바코드로부터 식품 정보를 가져오고, 영양 정보를 Fetch하는 Runnable 클래스
+     */
+    private class FetchFoodRunnable implements Runnable {
+        private String barcode;
+
+        FetchFoodRunnable(String barcode) {
+            this.barcode = barcode;
+        }
+
+
+        @Override
+        public void run() {
+            FetchResult result;
+            try {
+                // 1. 바코드로 식품 정보를 가져오기
+                String foodInfo = fetchFoodInfo(barcode);
+                if (foodInfo == null || foodInfo.isEmpty()) {
+                    result = new FetchResult("식품 정보를 가져올 수 없습니다.");
+                } else {
+                    // 2. XML 응답에서 첫 번째 식품 이름 추출
+                    String foodName = extractFoodNameFromResponse(foodInfo);
+                    if (foodName == null || foodName.isEmpty()) {
+                        result = new FetchResult("식품 이름을 가져올 수 없습니다.");
+                    } else {
+                        // 3. 식품 이름으로 영양 정보 가져오기
+                        String nutritionInfo = fetchNutritionInfo(foodName);
+                        if (nutritionInfo == null || nutritionInfo.isEmpty()) {
+                            result = new FetchResult("영양 정보를 가져올 수 없습니다.");
+                        } else {
+                            // 성공적인 결과를 생성
+                            result = new FetchResult(foodName, nutritionInfo);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("FetchFoodRunnable", "데이터 가져오기 중 오류 발생: ", e);
+                result = new FetchResult("데이터 가져오기 중 오류가 발생했습니다.");
+            }
+
+            // FetchResult를 메인 스레드에서 처리
+            final FetchResult finalResult = result;
+            mainHandler.post(() -> {
+                if (finalResult.errorMessage != null) {
+                    Toast.makeText(ScanBarcodeActivity.this, finalResult.errorMessage, Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(ScanBarcodeActivity.this, DisplayNutritionActivity.class);
+                    intent.putExtra("foodName", finalResult.foodName);
+                    intent.putExtra("nutritionInfo", finalResult.nutritionInfo);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+        /**
+     * 바코드로부터 식품 정보를 Fetch하는 메서드
+     */
+    private String fetchFoodInfo(String barcode) {
+        try {
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http")
+                    .authority("openapi.foodsafetykorea.go.kr")
+                    .appendPath("api")
+                    .appendPath("0ec81814ab4442ed9dd6")
+                    .appendPath("C005")
+                    .appendPath("json") // JSON 형식 요청
+                    .appendPath("1")
+                    .appendPath("5")
+                    .appendQueryParameter("BAR_CD", barcode);
+            String urlString = builder.build().toString();
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                Log.e("API_ERROR", "HTTP error code: " + responseCode);
+                return null;
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            Log.d("FETCH_FOOD_INFO", "Response: " + response.toString());
+            return response.toString();
+        } catch (Exception e) {
+            Log.e("FETCH_FOOD_INFO_ERROR", "Error fetching food info: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 식품 이름을 기반으로 영양 정보를 Fetch하는 메서드
+     */
+    private String fetchNutritionInfo(String foodName) {
+        try {
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http")
+                    .authority("apis.data.go.kr")
+                    .appendPath("1471000")
+                    .appendPath("FoodNtrCpntDbInfo01")
+                    .appendPath("getFoodNtrCpntDbInq01")
+                    .appendQueryParameter("serviceKey", nutritionApiKey)
+                    .appendQueryParameter("FOOD_NM_KR", foodName) // 그대로 사용
+                    .appendQueryParameter("type", "xml")
+                    .appendQueryParameter("pageNo", "1")
+                    .appendQueryParameter("numOfRows", "10");
+
+            String urlString = builder.build().toString();
+            Log.d("FETCH_URL", "Generated URL: " + urlString); // URL 디버깅 로그
+            String xmlResponse = makeHttpRequest(urlString);
+
+            if (xmlResponse == null || xmlResponse.isEmpty()) {
+                Log.e("FETCH_ERROR", "No response from API.");
+                return "API 응답이 없습니다.";
+            }
+
+            // XML 응답에서 대조 수행
+            String processedFoodName = extractMatchingFoodName(xmlResponse, foodName);
+            if (processedFoodName == null) {
+                return "일치하는 영양 정보를 찾을 수 없습니다.";
+            }
+
+            return parseNutritionResponse(xmlResponse);
+
+        } catch (Exception e) {
+            Log.e("FETCH_ERROR", "Error fetching nutrition info: " + e.getMessage());
+            e.printStackTrace();
+            return "영양 정보를 가져오는 동안 오류가 발생했습니다.";
+        }
+    }
+    private String extractMatchingFoodName(String xmlResponse, String inputFoodName) {
+        try {
             XmlPullParser parser = Xml.newPullParser();
-            parser.setInput(new StringReader(xmlResponse)); // XML 데이터 입력
+            parser.setInput(new StringReader(xmlResponse));
             int eventType = parser.getEventType();
 
             String tagName = null;
-            String foodName = null;
-
-            // XML 문서를 순차적으로 읽기
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 switch (eventType) {
                     case XmlPullParser.START_TAG:
-                        tagName = parser.getName(); // 현재 태그 이름 가져오기
+                        tagName = parser.getName();
                         break;
 
                     case XmlPullParser.TEXT:
-                        if ("PRDLST_NM".equals(tagName)) { // 원하는 태그인지 확인
-                            foodName = parser.getText().trim(); // 태그 안의 텍스트 가져오기
+                        if ("FOOD_NM_KR".equals(tagName)) {
+                            String foodNameFromResponse = parser.getText().trim();
+                            if (foodNameFromResponse.contains(inputFoodName)) {
+                                Log.d("MATCH_FOUND", "Matched Food Name: " + foodNameFromResponse);
+                                return foodNameFromResponse; // 일치하는 식품 이름 반환
+                            }
                         }
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if ("row".equals(parser.getName()) && foodName != null) {
-                            // 필요한 데이터를 찾으면 루프 종료
-                            return foodName;
+                        tagName = null;
+                        break;
+                }
+                eventType = parser.next();
+            }
+        } catch (Exception e) {
+            Log.e("PARSING_ERROR", "Error parsing XML response: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null; // 일치하는 값이 없는 경우 null 반환
+    }
+
+
+    /**
+     * HTTP GET 요청을 수행하고 응답을 반환하는 메서드
+     */
+    private String makeHttpRequest(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                Log.e("HTTP_REQUEST_ERROR", "HTTP error code: " + responseCode);
+                return null;
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            Log.d("MAKE_HTTP_REQUEST", "Response: " + response.toString());
+            return response.toString();
+        } catch (Exception e) {
+            Log.e("MAKE_HTTP_REQUEST_ERROR", "Error making HTTP request: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 영양 정보 XML 응답을 파싱하여 문자열로 반환하는 메서드
+     */
+    private String parseNutritionResponse(String xmlResponse) {
+        StringBuilder nutritionInfo = new StringBuilder();
+        try {
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setInput(new StringReader(xmlResponse));
+            int eventType = parser.getEventType();
+
+            String tagName = null;
+            String foodName = null;
+            String calories = null;
+            String protein = null;
+            String fat = null;
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        tagName = parser.getName();
+                        break;
+
+                    case XmlPullParser.TEXT:
+                        String text = parser.getText().trim();
+                        if (tagName != null && !text.isEmpty()) {
+                            switch (tagName) {
+                                case "FOOD_NM_KR": // 식품명
+                                    foodName = extractActualFoodName(text); // 가공된 이름으로 설정
+                                    break;
+                                case "AMT_NUM1": // 칼로리
+                                    calories = text + " kcal";
+                                    break;
+                                case "AMT_NUM3": // 단백질
+                                    protein = text + " g";
+                                    break;
+                                case "AMT_NUM4": // 지방
+                                    fat = text + " g";
+                                    break;
+                            }
+                        }
+                        break;
+
+                    case XmlPullParser.END_TAG:
+                        if ("item".equals(parser.getName())) {
+                            // 각 아이템의 정보를 문자열로 추가
+                            nutritionInfo.append("식품명: ").append(foodName != null ? foodName : "N/A").append("\n");
+                            nutritionInfo.append("칼로리: ").append(calories != null ? calories : "N/A").append("\n");
+                            nutritionInfo.append("단백질: ").append(protein != null ? protein : "N/A").append("\n");
+                            nutritionInfo.append("지방: ").append(fat != null ? fat : "N/A").append("\n\n");
+
+                            // 다음 아이템을 위해 값 초기화
+                            foodName = calories = protein = fat = null;
                         }
                         tagName = null;
                         break;
                 }
-                eventType = parser.next(); // 다음 이벤트로 이동
+                eventType = parser.next();
             }
         } catch (Exception e) {
-            Log.e("XML_PARSING_ERROR", "Error parsing XML response: " + e.getMessage());
+            Log.e("PARSING_ERROR", "Error parsing XML response: " + e.getMessage());
             e.printStackTrace();
+            return "XML 데이터를 파싱하는 동안 오류가 발생했습니다.";
         }
-        return null; // 오류 발생 시 null 반환
+        return nutritionInfo.toString();
     }
 
-    private class FetchFoodTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            String barcode = params[0];
-            try {
-                // Step 1: Fetch food information based on the barcode
-                String foodInfo = fetchFoodInfo(barcode);
-                if (foodInfo == null || foodInfo.isEmpty()) {
-                    return "ERROR: 식품 정보를 가져올 수 없습니다.";
-                }
-
-                // Step 2: Extract food name from the fetched food information
-                String foodName = extractFoodNameFromResponse(foodInfo);
-                if (foodName == null || foodName.isEmpty()) {
-                    return "ERROR: 식품 이름을 가져올 수 없습니다.";
-                }
-
-                // Step 3: Fetch nutrition information using the food name
-                String nutritionInfo = fetchNutritionInfo(foodName);
-                if (nutritionInfo == null || nutritionInfo.isEmpty()) {
-                    return "ERROR: 영양 정보를 가져올 수 없습니다.";
-                }
-
-                // Return combined data: food name and nutrition info
-                return "FOOD_NAME:" + foodName + "\n" + nutritionInfo;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "ERROR: 데이터 가져오기 중 오류가 발생했습니다.";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (result != null && !result.isEmpty()) {
-                // Check if the result indicates an error
-                if (result.startsWith("ERROR:")) {
-                    Toast.makeText(ScanBarcodeActivity.this, result.replace("ERROR:", "").trim(), Toast.LENGTH_SHORT).show();
-                } else if (result.startsWith("FOOD_NAME:")) {
-                    // Extract food name and nutrition info from the result
-                    String[] splitResult = result.split("\n", 2); // Split into food name and nutrition info
-                    String foodName = splitResult[0].replace("FOOD_NAME:", "").trim();
-                    String nutritionInfo = splitResult.length > 1 ? splitResult[1].trim() : "";
-
-                    // Pass the data to the next activity
-                    Intent intent = new Intent(ScanBarcodeActivity.this, DisplayNutritionActivity.class);
-                    intent.putExtra("foodName", foodName);
-                    intent.putExtra("nutritionInfo", nutritionInfo);
-                    startActivity(intent); // Move to DisplayNutritionActivity
-                } else {
-                    Toast.makeText(ScanBarcodeActivity.this, "알 수 없는 응답 형식입니다.", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(ScanBarcodeActivity.this, "API 응답을 가져오는 데 실패했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        private String fetchFoodInfo(String barcode) {
-            try {
-                String baseUrl = "http://openapi.foodsafetykorea.go.kr/api";
-                String apiKeyPath = "/0ec81814ab4442ed9dd6/C005/json/1/5/";
-
-              
-                String urlString = new StringBuilder()
-                        .append(baseUrl)
-                        .append(apiKeyPath)
-                        .append("BAR_CD=")
-                        .append(URLEncoder.encode(barcode, "UTF-8")) // 쿼리 매개변수 값 인코딩
-                        .toString();
-
-                URL url = new URL(urlString);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-
-                int responseCode = connection.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    Log.e("API_ERROR", "HTTP error code: " + responseCode);
-                    return null;
-                }
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-
-                Log.d("API_RESPONSE", "Response: " + response.toString());
-                return response.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        private String fetchNutritionInfo(String foodName) {
-            try {
-                String baseUrl = "https://apis.data.go.kr/1471000/FoodNtrCpntDbInfo01/getFoodNtrCpntDbInq01";
-
-                // URLBuilder 스타일로 URL 생성
-                String urlString = new StringBuilder()
-                        .append(baseUrl)
-                        .append("?serviceKey=")
-                        .append(URLEncoder.encode(nutritionApiKey, "UTF-8")) // API 키 인코딩
-                        .append("&desc_kor=")
-                        .append(URLEncoder.encode(foodName, "UTF-8")) // 음식 이름 인코딩
-                        .append("&type=json&pageNo=1&numOfRows=10")
-                        .toString();
-
-                String jsonResponse = makeHttpRequest(urlString);
-                return parseNutritionResponse(jsonResponse);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        private String makeHttpRequest(String urlString) {
-            try {
-                URL url = new URL(urlString);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-
-                return response.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        private String parseNutritionResponse(String xmlResponse) {
-            StringBuilder nutritionInfo = new StringBuilder();
-            try {
-                // XML 파서 준비
-                XmlPullParser parser = Xml.newPullParser();
-                parser.setInput(new StringReader(xmlResponse));
-                int eventType = parser.getEventType();
-
-                String tagName = null;
-                String foodName = null;
-                String calories = null;
-                String protein = null;
-                String fat = null;
-
-                while (eventType != XmlPullParser.END_DOCUMENT) {
-                    switch (eventType) {
-                        case XmlPullParser.START_TAG:
-                            tagName = parser.getName();
-                            break;
-
-                        case XmlPullParser.TEXT:
-                            String text = parser.getText().trim();
-                            if (tagName != null && !text.isEmpty()) {
-                                switch (tagName) {
-                                    case "FOOD_NM_KR": // 식품명
-                                        foodName = text;
-                                        break;
-                                    case "AMT_NUM1": // 칼로리
-                                        calories = text + "kcal";
-                                        break;
-                                    case "AMT_NUM3": // 단백질
-                                        protein = text + "g";
-                                        break;
-                                    case "AMT_NUM4": // 지방
-                                        fat = text + "g";
-                                        break;
-                                }
-                            }
-                            break;
-
-                        case XmlPullParser.END_TAG:
-                            if (parser.getName().equals("item")) {
-                                // 각 아이템의 정보를 문자열로 추가
-                                nutritionInfo.append("식품명: ").append(foodName != null ? foodName : "N/A").append("\n");
-                                nutritionInfo.append("칼로리: ").append(calories != null ? calories : "N/A").append("\n");
-                                nutritionInfo.append("단백질: ").append(protein != null ? protein : "N/A").append("\n");
-                                nutritionInfo.append("지방: ").append(fat != null ? fat : "N/A").append("\n\n");
-
-                                // 다음 아이템을 위해 값 초기화
-                                foodName = calories = protein = fat = null;
-                            }
-                            tagName = null;
-                            break;
-                    }
-                    eventType = parser.next();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "XML 데이터를 파싱하는 동안 오류가 발생했습니다.";
-            }
-            return nutritionInfo.toString();
-        }
-    }
         protected void onDestroy() {
             if (textToSpeech != null) {
                 textToSpeech.stop();
