@@ -1,8 +1,5 @@
 package com.example.nutritionrealtimeapp;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.widget.Button;
@@ -11,16 +8,19 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.OutputStream;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Locale;
-import java.util.UUID;
 
 public class DisplayNutritionActivity extends AppCompatActivity {
 
-    private BluetoothSocket bluetoothSocket;
-    private OutputStream outputStream;
     private TextToSpeech tts; // Text-to-Speech 객체
+    private String apiKey = "YOUR_API_KEY"; // API 키
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,26 +29,13 @@ public class DisplayNutritionActivity extends AppCompatActivity {
 
         TextView barcodeTextView = findViewById(R.id.barcodeTextView);
         TextView nutritionInfoTextView = findViewById(R.id.nutritionInfoTextView);
-        Button brailleButton = findViewById(R.id.brailleButton);
         Button speechButton = findViewById(R.id.speechButton);
 
         // Retrieve data from the previous activity
         String barcodeValue = getIntent().getStringExtra("barcodeValue");
-        List<String> selectedNutritionInfo = getIntent().getStringArrayListExtra("selectedNutritionInfo");
 
         // Display barcode information
         barcodeTextView.setText("바코드 번호: " + (barcodeValue != null ? barcodeValue : "없음"));
-
-        // Display nutrition information
-        if (selectedNutritionInfo != null && !selectedNutritionInfo.isEmpty()) {
-            StringBuilder nutritionInfoBuilder = new StringBuilder();
-            for (String info : selectedNutritionInfo) {
-                nutritionInfoBuilder.append(info).append(": 없음\n");
-            }
-            nutritionInfoTextView.setText(nutritionInfoBuilder.toString());
-        } else {
-            nutritionInfoTextView.setText("선택된 영양정보가 없습니다.");
-        }
 
         // Initialize TextToSpeech
         tts = new TextToSpeech(this, status -> {
@@ -59,8 +46,12 @@ public class DisplayNutritionActivity extends AppCompatActivity {
             }
         });
 
-//        // Button to send braille data
-//        brailleButton.setOnClickListener(v -> sendToBraille(selectedNutritionInfo));
+        // Fetch and display nutrition info
+        if (barcodeValue != null) {
+            fetchNutritionInfo(barcodeValue, nutritionInfoTextView);
+        } else {
+            nutritionInfoTextView.setText("바코드 값이 없습니다.");
+        }
 
         // Button to read text via speech
         speechButton.setOnClickListener(v -> {
@@ -72,41 +63,68 @@ public class DisplayNutritionActivity extends AppCompatActivity {
             }
         });
     }
-//
-//    private void sendToBraille(List<String> nutritionInfo) {
-//        try {
-//            // Check if Bluetooth is available and enabled
-//            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//            if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
-//                Toast.makeText(this, "블루투스를 활성화해주세요.", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//
-//            // Connect to the Arduino Bluetooth device
-//            BluetoothDevice device = bluetoothAdapter.getRemoteDevice("00:00:00:00:00:00"); // Replace with your Arduino's Bluetooth address
-//            bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-//            bluetoothSocket.connect();
-//            outputStream = bluetoothSocket.getOutputStream();
-//
-//            // Send nutrition information as braille data
-//            if (nutritionInfo != null) {
-//                for (String info : nutritionInfo) {
-//                    outputStream.write((info + "\n").getBytes());
-//                }
-//                Toast.makeText(this, "점자 데이터 전송 완료!", Toast.LENGTH_SHORT).show();
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Toast.makeText(this, "점자 데이터 전송 실패", Toast.LENGTH_SHORT).show();
-//        } finally {
-//            // Clean up resources
-//            try {
-//                if (outputStream != null) outputStream.close();
-//                if (bluetoothSocket != null) bluetoothSocket.close();
-//            } catch (Exception ignored) {}
-//        }
-//    }
+
+    private void fetchNutritionInfo(String barcode, TextView nutritionInfoTextView) {
+        new Thread(() -> {
+            try {
+                String urlString = "http://openapi.foodsafetykorea.go.kr/api/"
+                        + apiKey
+                        + "/C005/json/1/5/BAR_CD=" + barcode;
+
+                URL url = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                // Parse and display the JSON response
+                runOnUiThread(() -> parseAndDisplayNutritionInfo(response.toString(), nutritionInfoTextView));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(this, "API 호출 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+    private void parseAndDisplayNutritionInfo(String jsonResponse, TextView nutritionInfoTextView) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONObject body = jsonObject.getJSONObject("body");
+            JSONArray items = body.getJSONArray("items");
+
+            StringBuilder nutritionInfoBuilder = new StringBuilder();
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+
+                String foodName = item.getString("DESC_KOR");
+                String calorie = item.optString("NUTR_CONT1", "N/A");
+                String protein = item.optString("NUTR_CONT2", "N/A");
+                String fat = item.optString("NUTR_CONT3", "N/A");
+                String carbs = item.optString("NUTR_CONT4", "N/A");
+
+                nutritionInfoBuilder.append("음식 이름: ").append(foodName).append("\n")
+                        .append("칼로리: ").append(calorie).append("\n")
+                        .append("단백질: ").append(protein).append("\n")
+                        .append("지방: ").append(fat).append("\n")
+                        .append("탄수화물: ").append(carbs).append("\n\n");
+            }
+
+            // Display the parsed nutrition info
+            nutritionInfoTextView.setText(nutritionInfoBuilder.toString());
+        } catch (Exception e) {
+            Toast.makeText(this, "JSON 파싱 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void speakText(String text) {
         if (tts != null) {

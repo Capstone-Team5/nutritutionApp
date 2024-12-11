@@ -20,12 +20,22 @@ import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
+
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import android.speech.tts.TextToSpeech;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Locale;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class ScanBarcodeActivity extends AppCompatActivity {
@@ -35,6 +45,9 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private SharedPreferences sharedPreferences;
     private TextToSpeech textToSpeech;
+    private String apiKey = "/0ec81814ab4442ed9dd6"; // 식품 정보 API 키
+    private String nutritionApiKey = "zblpVQX%2B75IpUWic%2BfeIY7TaV1DCNu8qOPWmVR2AUqYKrsB%2BNM6wYv1pjWczB0%2FK2TNlTq%2FOmaZ67dSEImlQeQ%3D%3D"; // 영양 정보 API 키
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +98,12 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         // 알레르기 수정 버튼
         editAllergyButton.setOnClickListener(v -> {
             Intent intent = new Intent(ScanBarcodeActivity.this, SelectAllergiesActivity.class);
+            intent.putExtra("isReturningFromEdit", true);
             startActivity(intent);
             finish();
         });
     }
-
     private void startBarcodeScanner() {
-        // 바코드 스캐너 설정
         GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
                 .setBarcodeFormats(
                         Barcode.FORMAT_QR_CODE,
@@ -104,18 +116,31 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         scanner.startScan()
                 .addOnSuccessListener(barcode -> {
                     String rawValue = barcode.getRawValue();
+                    if (rawValue != null) {
+                        // 1. 바코드 값으로 첫 번째 API 호출
+                        String foodInfo = fetchFoodInfo(rawValue);
 
-                    // 알레르기 데이터 확인 및 알림
-                    if (rawValue != null && selectedAllergies != null) {
-                        for (String allergy : selectedAllergies) {
-                            if (rawValue.contains(allergy)) {
-                                Toast.makeText(this, "주의: " + allergy + "가 포함되었습니다!", Toast.LENGTH_LONG).show();
-                                break;
+                        if (foodInfo != null) {
+                            // 2. 첫 번째 API 응답에서 식품 이름 추출
+                            String foodName = extractFoodNameFromResponse(foodInfo);
+                            if (foodName != null) {
+                                // 3. 식품 이름으로 두 번째 API 호출
+                                String nutritionInfo = fetchNutritionInfo(foodName);
+
+                                if (nutritionInfo != null) {
+                                    // 4. 두 번째 API 응답 데이터를 화면에 표시
+                                    TextView nutritionInfoTextView = findViewById(R.id.nutritionInfoTextView);
+                                    parseAndDisplayNutritionInfo(nutritionInfo, nutritionInfoTextView);
+                                } else {
+                                    Toast.makeText(this, "영양 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(this, "식품 이름을 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
                             }
+                        } else {
+                            Toast.makeText(this, "식품 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
-
-                    saveToFirestore(rawValue); // Firestore에 저장
                 })
                 .addOnCanceledListener(() -> {
                     Toast.makeText(this, "스캔이 취소되었습니다.", Toast.LENGTH_SHORT).show();
@@ -124,7 +149,6 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     Toast.makeText(this, "스캔 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-    
     private void checkAllergies(String recognizedText) {
         if (recognizedText != null && selectedAllergies != null) {
             for (String allergy : selectedAllergies) {
@@ -173,6 +197,127 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     Toast.makeText(this, "데이터 저장 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+    private String fetchFoodInfo(String barcode) {
+        try {
+            String urlString = "http://openapi.foodsafetykorea.go.kr/api/" + apiKey +
+                    "/C005/json/1/5/BAR_CD=" + URLEncoder.encode(barcode, "UTF-8");
+
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            return response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String extractFoodNameFromResponse(String jsonResponse) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONObject body = jsonObject.getJSONObject("body");
+            JSONArray items = body.getJSONArray("items");
+
+            if (items.length() > 0) {
+                JSONObject item = items.getJSONObject(0);
+                return item.getString("DESC_KOR"); // 식품 이름 필드
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String fetchNutritionInfo(String foodName) {
+        try {
+            // URL 생성: foodName을 기반으로 영양 정보 가져오기
+            String urlString = "https://apis.data.go.kr/1471000/FoodNtrCpntDbInfo01/getFoodNtrCpntDbInq01?" +
+                    "serviceKey=" + URLEncoder.encode(nutritionApiKey, "UTF-8") +
+                    "&desc_kor=" + URLEncoder.encode(foodName, "UTF-8");
+
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            return response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    private void parseAndDisplayNutritionInfo(String jsonResponse, TextView nutritionInfoTextView) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONObject body = jsonObject.getJSONObject("body");
+            JSONArray items = body.getJSONArray("items");
+
+            StringBuilder nutritionInfoBuilder = new StringBuilder();
+
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+
+                String foodName = item.getString("DESC_KOR");
+                String calorie = item.optString("NUTR_CONT1", "N/A");
+                String protein = item.optString("NUTR_CONT2", "N/A");
+                String fat = item.optString("NUTR_CONT3", "N/A");
+                String carbs = item.optString("NUTR_CONT4", "N/A");
+
+                nutritionInfoBuilder.append("음식 이름: ").append(foodName).append("\n")
+                        .append("칼로리: ").append(calorie).append("\n")
+                        .append("단백질: ").append(protein).append("\n")
+                        .append("지방: ").append(fat).append("\n")
+                        .append("탄수화물: ").append(carbs).append("\n\n");
+            }
+
+            // Display the parsed nutrition info
+            nutritionInfoTextView.setText(nutritionInfoBuilder.toString());
+        } catch (Exception e) {
+            Toast.makeText(this, "JSON 파싱 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void filterAndDisplayNutritionInfo(List<String> nutritionInfo) {
+        TextView nutritionInfoTextView = findViewById(R.id.nutritionInfoTextView);
+
+        // 값이 있는 항목만 필터링
+        StringBuilder displayedInfo = new StringBuilder();
+        for (String info : nutritionInfo) {
+            if (info != null && !info.isEmpty() && !info.equals("없음")) { // 값이 없거나 기본값인 "없음" 제외
+                displayedInfo.append(info).append("\n");
+            }
+        }
+
+        // 필터링된 데이터 표시
+        if (displayedInfo.length() > 0) {
+            nutritionInfoTextView.setText(displayedInfo.toString());
+        } else {
+            nutritionInfoTextView.setText("저장된 영양 정보가 없습니다.");
+        }
+    }
+
     protected void onDestroy() {
         if (textToSpeech != null) {
             textToSpeech.stop();

@@ -21,6 +21,7 @@ import java.util.UUID;
 public class SelectAllergiesActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
+    private boolean isReturningFromEdit = false; // 수정 여부 확인 플래그
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,9 @@ public class SelectAllergiesActivity extends AppCompatActivity {
         if (savedAllergies.contains("우유")) checkBoxDairy.setChecked(true);
         if (savedAllergies.contains("글루틴")) checkBoxGluten.setChecked(true);
 
+        // 수정 여부 확인 (인텐트로 전달받은 값)
+        isReturningFromEdit = getIntent().getBooleanExtra("isReturningFromEdit", false);
+
         // 기기별 고유 ID 생성 (UUID 사용)
         String userId = getOrCreateUserId();
 
@@ -54,31 +58,38 @@ public class SelectAllergiesActivity extends AppCompatActivity {
             if (checkBoxDairy.isChecked()) selectedAllergies.add("우유");
             if (checkBoxGluten.isChecked()) selectedAllergies.add("글루틴");
 
+            // Firestore에 저장할 데이터 준비
+            HashMap<String, Object> allergyData = new HashMap<>();
+            allergyData.put("allergies", selectedAllergies);
 
-                // Firestore에 저장할 데이터 준비
-                HashMap<String, Object> allergyData = new HashMap<>();
-                allergyData.put("allergies", selectedAllergies);
+            // Firestore에 데이터 저장
+            db.collection("Allergies").document(userId)
+                    .set(allergyData)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "알레르기 저장 완료!", Toast.LENGTH_SHORT).show();
 
-                // Firestore에 데이터 저장
-                db.collection("Allergies").document(userId)
-                        .set(allergyData)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(this, "알레르기 저장 완료!", Toast.LENGTH_SHORT).show();
+                        // SharedPreferences에 알레르기 데이터 저장
+                        saveAllergiesToPreferences(selectedAllergies);
 
-                            // SharedPreferences에 알레르기 데이터 저장
-                            saveAllergiesToPreferences(selectedAllergies);
-
-                            // SelectNutritionInfoActivity로 이동
+                        // 다음 화면으로 이동
+                        if (isReturningFromEdit) {
+                            // 수정 후 돌아온 경우 BarcodeActivity로 이동
+                            Intent intent = new Intent(SelectAllergiesActivity.this, ScanBarcodeActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // 처음 저장한 경우 NutritionInfoActivity로 이동
                             Intent intent = new Intent(SelectAllergiesActivity.this, SelectNutritionInfoActivity.class);
                             intent.putStringArrayListExtra("selectedAllergies", (ArrayList<String>) selectedAllergies);
                             startActivity(intent);
-                            finish(); // 현재 액티비티 종료
-                        })
-                        .addOnFailureListener(e -> Toast.makeText(this, "저장 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        }
+
+                        finish(); // 현재 액티비티 종료
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(this, "저장 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
     }
 
-    // SharedPreferences에 UUID 저장 및 불러오기
+    // SharedPreferences에 UUTLATID 저장 및 불러오기
     private String getOrCreateUserId() {
         String userId = sharedPreferences.getString("userId", null);
 

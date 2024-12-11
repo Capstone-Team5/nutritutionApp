@@ -6,6 +6,7 @@ plugins {
 
     id 'com.google.gms.google-services'
 
+
 }
 
 android {
@@ -65,13 +66,12 @@ dependencies {
     implementation 'androidx.camera:camera-view:1.4.0'
     implementation 'androidx.camera:camera-lifecycle:1.4.0'
     implementation 'androidx.appcompat:appcompat:1.6.1' // AppCompat 라이브러리
-    // 확장 기능 (선택 사항, 추가 효과 사용 시)
+    // 확장 기능
     implementation 'androidx.camera:camera-extensions:1.4.0'
-    // Firebase Analytics 추가 (선택 사항)
+    // Firebase Analytics 추가
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.mlkit:barcode-scanning:17.3.0'
-    // 필요한 Firebase 제품 추가
-    // 예: Firestore, Authentication, Realtime Database 등
+    // Firestore 추가
     implementation 'com.google.firebase:firebase-firestore'
     // implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.code.gson:gson:2.8.8'
