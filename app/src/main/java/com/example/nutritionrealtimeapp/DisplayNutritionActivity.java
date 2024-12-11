@@ -22,32 +22,26 @@ public class DisplayNutritionActivity extends AppCompatActivity {
     private OutputStream outputStream;
     private TextToSpeech tts; // Text-to-Speech 객체
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_nutrition);
 
         TextView barcodeTextView = findViewById(R.id.barcodeTextView);
         TextView nutritionInfoTextView = findViewById(R.id.nutritionInfoTextView);
-        Button brailleButton = findViewById(R.id.brailleButton);
         Button speechButton = findViewById(R.id.speechButton);
 
         // Retrieve data from the previous activity
-        String barcodeValue = getIntent().getStringExtra("barcodeValue");
-        List<String> selectedNutritionInfo = getIntent().getStringArrayListExtra("selectedNutritionInfo");
+        String foodName = getIntent().getStringExtra("foodName");
+        String nutritionInfo = getIntent().getStringExtra("nutritionInfo");
 
-        // Display barcode information
-        barcodeTextView.setText("바코드 번호: " + (barcodeValue != null ? barcodeValue : "없음"));
+        // Display food name and barcode information
+        barcodeTextView.setText("식품명: " + (foodName != null ? foodName : "없음"));
 
         // Display nutrition information
-        if (selectedNutritionInfo != null && !selectedNutritionInfo.isEmpty()) {
-            StringBuilder nutritionInfoBuilder = new StringBuilder();
-            for (String info : selectedNutritionInfo) {
-                nutritionInfoBuilder.append(info).append(": 없음\n");
-            }
-            nutritionInfoTextView.setText(nutritionInfoBuilder.toString());
+        if (nutritionInfo != null && !nutritionInfo.isEmpty()) {
+            nutritionInfoTextView.setText(nutritionInfo);
         } else {
-            nutritionInfoTextView.setText("선택된 영양정보가 없습니다.");
+            nutritionInfoTextView.setText("영양 정보가 없습니다.");
         }
 
         // Initialize TextToSpeech
@@ -59,6 +53,15 @@ public class DisplayNutritionActivity extends AppCompatActivity {
             }
         });
 
+        // Button to read text via speech
+        speechButton.setOnClickListener(v -> {
+            String text = nutritionInfoTextView.getText().toString();
+            if (!text.isEmpty()) {
+                speakText(text);
+            } else {
+                Toast.makeText(this, "읽을 텍스트가 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
 //        // Button to send braille data
 //        brailleButton.setOnClickListener(v -> sendToBraille(selectedNutritionInfo));
 

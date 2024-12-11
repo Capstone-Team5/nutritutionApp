@@ -329,20 +329,23 @@ public class ScanBarcodeActivity extends AppCompatActivity {
      */
     private String fetchNutritionInfo(String foodName) {
         try {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http")
-                    .authority("apis.data.go.kr")
-                    .appendPath("1471000")
-                    .appendPath("FoodNtrCpntDbInfo01")
-                    .appendPath("getFoodNtrCpntDbInq01")
-                    .appendQueryParameter("serviceKey", nutritionApiKey)
-                    .appendQueryParameter("FOOD_NM_KR", foodName)
-                    .appendQueryParameter("type", "xml")
-                    .appendQueryParameter("pageNo", "1")
-                    .appendQueryParameter("numOfRows", "10");
+            // URL 직접 생성
+            String baseUrl = "https://apis.data.go.kr/1471000/FoodNtrCpntDbInfo01/getFoodNtrCpntDbInq01";
+            String foodNameWithoutSpaces = foodName.replace(" ", ""); // 띄어쓰기 제거
+            String encodedFoodName = URLEncoder.encode(foodNameWithoutSpaces, "UTF-8");
+            String dataType = "xml";
+            int pageNo = 1;
+            int numOfRows = 10;
 
-            String urlString = builder.build().toString();
+            // URL 문자열 생성
+            String urlString = String.format(
+                    "%s?serviceKey=%s&FOOD_NM_KR=%s&type=%s&pageNo=%d&numOfRows=%d",
+                    baseUrl, nutritionApiKey, encodedFoodName, dataType, pageNo, numOfRows
+            );
+
             Log.d("FETCH_URL", "Generated URL: " + urlString); // URL 디버깅 로그
+
+            // HTTP 요청
             String xmlResponse = makeHttpRequest(urlString);
 
             if (xmlResponse == null || xmlResponse.isEmpty()) {
@@ -350,12 +353,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                 return "API 응답이 없습니다.";
             }
 
-            // XML 응답에서 대조 수행
-            String processedFoodName = extractMatchingFoodName(xmlResponse, foodName);
-            if (processedFoodName == null) {
-                return "일치하는 영양 정보를 찾을 수 없습니다.";
-            }
-
+            // XML 응답 파싱
             return parseNutritionResponse(xmlResponse);
 
         } catch (Exception e) {
@@ -364,6 +362,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             return "영양 정보를 가져오는 동안 오류가 발생했습니다.";
         }
     }
+
     private String extractMatchingFoodName(String xmlResponse, String inputFoodName) {
         try {
             XmlPullParser parser = Xml.newPullParser();
