@@ -54,7 +54,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private SharedPreferences sharedPreferences;
     private TextToSpeech textToSpeech;
-    private String nutritionApiKey = "zblpVQX%2B75IpUWic%2BfeIY7TaV1DCNu8qOPWmVR2AUqYKrsB%2BNM6wYv1pjWczB0%2FK2TNlTq%2FOmaZ67dSEImlQeQ%3D%3D"; // 영양 정보 API 키
+    private String nutritionApiKey = ""; // 영양 정보 API 키
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
