@@ -15,8 +15,8 @@
 
     <TextView
         android:id="@+id/nutritionInfoTextView"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
         android:layout_marginBottom="32dp"
         android:text="선택된 영양정보가 없습니다."
         android:textSize="16sp" />

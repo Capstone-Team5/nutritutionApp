@@ -449,6 +449,8 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             String protein = null;
             String fat = null;
 
+            boolean isFirstItemProcessed = false; // 첫 번째 아이템 처리 여부 확인 변수
+
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 switch (eventType) {
                     case XmlPullParser.START_TAG:
@@ -457,36 +459,32 @@ public class ScanBarcodeActivity extends AppCompatActivity {
 
                     case XmlPullParser.TEXT:
                         String text = parser.getText().trim();
-                        if (tagName != null && !text.isEmpty()) {
-                            switch (tagName) {
-                                case "FOOD_NM_KR": // 식품명
-                                    foodName = extractActualFoodName(text); // 가공된 이름으로 설정
-                                    break;
-                                case "AMT_NUM1": // 칼로리
-                                    calories = text + " kcal";
-                                    break;
-                                case "AMT_NUM3": // 단백질
-                                    protein = text + " g";
-                                    break;
-                                case "AMT_NUM4": // 지방
-                                    fat = text + " g";
-                                    break;
+                        if (!text.isEmpty()&& !isFirstItemProcessed) {
+                            if ("FOOD_NM_KR".equals(tagName)) {
+                                foodName = extractActualFoodName(text);
+                            } else if ("AMT_NUM1".equals(tagName)) {
+                                calories = text + " kcal";
+                            } else if ("AMT_NUM3".equals(tagName)) {
+                                protein = text + " g";
+                            } else if ("AMT_NUM4".equals(tagName)) {
+                                fat = text + " g";
                             }
                         }
+                        tagName = null; // 한 번 사용 후 초기화
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if ("item".equals(parser.getName())) {
+                        if ("item".equals(parser.getName()) && !isFirstItemProcessed) {
+                            isFirstItemProcessed = true;
+
                             // 각 아이템의 정보를 문자열로 추가
                             nutritionInfo.append("식품명: ").append(foodName != null ? foodName : "N/A").append("\n");
                             nutritionInfo.append("칼로리: ").append(calories != null ? calories : "N/A").append("\n");
                             nutritionInfo.append("단백질: ").append(protein != null ? protein : "N/A").append("\n");
                             nutritionInfo.append("지방: ").append(fat != null ? fat : "N/A").append("\n\n");
-
                             // 다음 아이템을 위해 값 초기화
                             foodName = calories = protein = fat = null;
                         }
-                        tagName = null;
                         break;
                 }
                 eventType = parser.next();
