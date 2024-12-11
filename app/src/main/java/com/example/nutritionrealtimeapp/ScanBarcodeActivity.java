@@ -274,46 +274,55 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         /**
      * 바코드로부터 식품 정보를 Fetch하는 메서드
      */
-    private String fetchFoodInfo(String barcode) {
-        try {
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http")
-                    .authority("openapi.foodsafetykorea.go.kr")
-                    .appendPath("api")
-                    .appendPath("0ec81814ab4442ed9dd6")
-                    .appendPath("C005")
-                    .appendPath("json") // JSON 형식 요청
-                    .appendPath("1")
-                    .appendPath("5")
-                    .appendQueryParameter("BAR_CD", barcode);
-            String urlString = builder.build().toString();
-            URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+        private String fetchFoodInfo(String barcode) {
+            try {
+                // URL 직접 생성
+                String baseUrl = "https://openapi.foodsafetykorea.go.kr/api";
+                String apiKey = "0ec81814ab4442ed9dd6"; // API Key
+                String serviceId = "C005";
+                String dataType = "json"; // JSON 형식 요청
+                int startIndex = 1;
+                int endIndex = 5;
 
-            int responseCode = connection.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                Log.e("API_ERROR", "HTTP error code: " + responseCode);
+                // URL 문자열 생성
+                String urlString = String.format(
+                        "%s/%s/%s/%s/%d/%d/BAR_CD=%s",
+                        baseUrl, apiKey, serviceId, dataType, startIndex, endIndex, barcode
+                );
+
+                Log.d("FETCH_URL", "Generated URL: " + urlString);
+
+                // HTTP 요청
+                URL url = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setUseCaches(false); // 캐시 비활성화
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    Log.e("HTTP_ERROR", "HTTP error code: " + responseCode);
+                    return null;
+                }
+
+                // 응답 읽기
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                Log.d("FETCH_RESPONSE", "Response: " + response.toString());
+                return response.toString();
+
+            } catch (Exception e) {
+                Log.e("FETCH_ERROR", "Error fetching food info: " + e.getMessage());
+                e.printStackTrace();
                 return null;
             }
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            reader.close();
-
-            Log.d("FETCH_FOOD_INFO", "Response: " + response.toString());
-            return response.toString();
-        } catch (Exception e) {
-            Log.e("FETCH_FOOD_INFO_ERROR", "Error fetching food info: " + e.getMessage());
-            e.printStackTrace();
-            return null;
         }
-    }
 
     /**
      * 식품 이름을 기반으로 영양 정보를 Fetch하는 메서드
@@ -327,7 +336,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     .appendPath("FoodNtrCpntDbInfo01")
                     .appendPath("getFoodNtrCpntDbInq01")
                     .appendQueryParameter("serviceKey", nutritionApiKey)
-                    .appendQueryParameter("FOOD_NM_KR", foodName) // 그대로 사용
+                    .appendQueryParameter("FOOD_NM_KR", foodName)
                     .appendQueryParameter("type", "xml")
                     .appendQueryParameter("pageNo", "1")
                     .appendQueryParameter("numOfRows", "10");
