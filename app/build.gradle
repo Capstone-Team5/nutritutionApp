@@ -39,6 +39,23 @@ android {
     buildFeatures {
         compose true
     }
+    configurations.all {
+        //exclude group:'com.google.api.grpc',module:'proto-google-common-protos'
+        exclude group: 'com.google.protobuf', module: 'protobuf-javalite'
+        exclude group: 'com.google.guava',module: 'guava-jdk5'
+        exclude group: 'com.google.firebase', module: 'protolite-well-known-types'
+        resolutionStrategy {
+            force 'com.google.protobuf:protobuf-java:4.29.1'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
 }
 
 dependencies {
@@ -61,6 +78,7 @@ dependencies {
     androidTestImplementation libs.androidx.ui.test.junit4
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
+
     implementation platform('com.google.firebase:firebase-bom:33.6.0')
 // CameraX 핵심 기능
     implementation 'androidx.camera:camera-core:1.4.0'
@@ -73,10 +91,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.mlkit:barcode-scanning:17.3.0'
     // Firestore 추가
-    implementation 'com.google.firebase:firebase-firestore'
+    implementation('com.google.firebase:firebase-firestore')
+
     // implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.code.gson:gson:2.8.8'
-    implementation 'com.google.mlkit:text-recognition:16.0.1'
-    // 한국어 text recognition
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.1'
+    // Google Cloud Vision
+    implementation('com.google.cloud:google-cloud-vision:3.42.0')
+    implementation 'com.google.protobuf:protobuf-java:4.29.1'
+
+
 }
