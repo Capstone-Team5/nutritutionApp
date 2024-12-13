@@ -44,6 +44,15 @@
         <activity android:name=".ScanBarcodeActivity" />
         <activity android:name=".DisplayNutritionActivity" />
         <activity android:name=".ScanAllergyActivity"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.nutritionrealtimeapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
