@@ -9,10 +9,7 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +18,6 @@ import java.util.UUID;
 public class SelectNutritionInfoActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
-    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +29,6 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
         CheckBox checkBoxFat = findViewById(R.id.checkBox_fat);
         CheckBox checkBoxCarbs = findViewById(R.id.checkBox_carbs);
         Button saveButton = findViewById(R.id.saveButton);
-
-        // Firestore 초기화
-        db = FirebaseFirestore.getInstance();
 
         // SharedPreferences 초기화
         sharedPreferences = getSharedPreferences("NutritionApp", Context.MODE_PRIVATE);
@@ -63,26 +56,14 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
             if (selectedNutritionInfo.isEmpty()) {
                 Toast.makeText(this, "최소한 하나의 영양정보를 선택하세요!", Toast.LENGTH_SHORT).show();
             } else {
-                // Firestore에 저장할 데이터 준비
-                HashMap<String, Object> nutritionData = new HashMap<>();
-                nutritionData.put("nutritionInfo", selectedNutritionInfo);
+                // SharedPreferences에 선택한 데이터 저장
+                saveNutritionInfoToPreferences(selectedNutritionInfo);
 
-                // Firestore에 데이터 저장
-                db.collection("nutritionInfo").document(userId)
-                        .set(nutritionData)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(this, "영양정보 저장 완료!", Toast.LENGTH_SHORT).show();
-
-                            // SharedPreferences에 선택한 데이터 저장
-                            saveNutritionInfoToPreferences(selectedNutritionInfo);
-
-                            // ScanBarcodeActivity로 이동
-                            Intent intent = new Intent(SelectNutritionInfoActivity.this, ScanBarcodeActivity.class);
-                            intent.putStringArrayListExtra("selectedNutritionInfo", (ArrayList<String>) selectedNutritionInfo);
-                            startActivity(intent);
-                            finish(); // 현재 액티비티 종료
-                        })
-                        .addOnFailureListener(e -> Toast.makeText(this, "저장 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                // ScanBarcodeActivity로 이동
+                Intent intent = new Intent(SelectNutritionInfoActivity.this, ScanBarcodeActivity.class);
+                intent.putStringArrayListExtra("selectedNutritionInfo", (ArrayList<String>) selectedNutritionInfo);
+                startActivity(intent);
+                finish(); // 현재 액티비티 종료
             }
         });
     }

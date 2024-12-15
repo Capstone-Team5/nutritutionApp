@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+//import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
@@ -46,7 +46,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
 
     private List<String> selectedNutritionInfo;
     private List<String> selectedAllergies;
-    private FirebaseFirestore firestore;
+    //  private FirebaseFirestore firestore;
     private SharedPreferences sharedPreferences;
     private TextToSpeech textToSpeech;
     private String nutritionApiKey = "zblpVQX%2B75IpUWic%2BfeIY7TaV1DCNu8qOPWmVR2AUqYKrsB%2BNM6wYv1pjWczB0%2FK2TNlTq%2FOmaZ67dSEImlQeQ%3D%3D"; // 영양 정보 API 키
@@ -58,7 +58,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_barcode);
 
-        firestore = FirebaseFirestore.getInstance();
+//        firestore = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
 
         TextView nutritionInfoTextView = findViewById(R.id.nutritionInfoTextView);
@@ -264,6 +264,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(ScanBarcodeActivity.this, DisplayNutritionActivity.class);
                     intent.putExtra("foodName", finalResult.foodName);
+                    intent.putExtra("barcode",barcode);
                     intent.putExtra("nutritionInfo", finalResult.nutritionInfo);
                     startActivity(intent);
                 }
@@ -271,58 +272,58 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         }
     }
 
-        /**
+    /**
      * 바코드로부터 식품 정보를 Fetch하는 메서드
      */
-        private String fetchFoodInfo(String barcode) {
-            try {
-                // URL 직접 생성
-                String baseUrl = "https://openapi.foodsafetykorea.go.kr/api";
-                String apiKey = "0ec81814ab4442ed9dd6"; // API Key
-                String serviceId = "C005";
-                String dataType = "json"; // JSON 형식 요청
-                int startIndex = 1;
-                int endIndex = 5;
+    private String fetchFoodInfo(String barcode) {
+        try {
+            // URL 직접 생성
+            String baseUrl = "https://openapi.foodsafetykorea.go.kr/api";
+            String apiKey = "0ec81814ab4442ed9dd6"; // API Key
+            String serviceId = "C005";
+            String dataType = "json"; // JSON 형식 요청
+            int startIndex = 1;
+            int endIndex = 5;
 
-                // URL 문자열 생성
-                String urlString = String.format(
-                        "%s/%s/%s/%s/%d/%d/BAR_CD=%s",
-                        baseUrl, apiKey, serviceId, dataType, startIndex, endIndex, barcode
-                );
+            // URL 문자열 생성
+            String urlString = String.format(
+                    "%s/%s/%s/%s/%d/%d/BAR_CD=%s",
+                    baseUrl, apiKey, serviceId, dataType, startIndex, endIndex, barcode
+            );
 
-                Log.d("FETCH_URL", "Generated URL: " + urlString);
+            Log.d("FETCH_URL", "Generated URL: " + urlString);
 
-                // HTTP 요청
-                URL url = new URL(urlString);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setUseCaches(false); // 캐시 비활성화
+            // HTTP 요청
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setUseCaches(false); // 캐시 비활성화
 
-                int responseCode = connection.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    Log.e("HTTP_ERROR", "HTTP error code: " + responseCode);
-                    return null;
-                }
-
-                // 응답 읽기
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-
-                Log.d("FETCH_RESPONSE", "Response: " + response.toString());
-                return response.toString();
-
-            } catch (Exception e) {
-                Log.e("FETCH_ERROR", "Error fetching food info: " + e.getMessage());
-                e.printStackTrace();
+            int responseCode = connection.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                Log.e("HTTP_ERROR", "HTTP error code: " + responseCode);
                 return null;
             }
+
+            // 응답 읽기
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            Log.d("FETCH_RESPONSE", "Response: " + response.toString());
+            return response.toString();
+
+        } catch (Exception e) {
+            Log.e("FETCH_ERROR", "Error fetching food info: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
+    }
 
     /**
      * 식품 이름을 기반으로 영양 정보를 Fetch하는 메서드
@@ -497,11 +498,11 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         return nutritionInfo.toString();
     }
 
-        protected void onDestroy() {
-            if (textToSpeech != null) {
-                textToSpeech.stop();
-                textToSpeech.shutdown();
-            }
-            super.onDestroy();
+    protected void onDestroy() {
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
         }
+        super.onDestroy();
     }
+}

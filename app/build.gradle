@@ -3,10 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-
     id 'com.google.gms.google-services'
-
-
 }
 
 android {
@@ -39,15 +36,7 @@ android {
     buildFeatures {
         compose true
     }
-    configurations.all {
-        //exclude group:'com.google.api.grpc',module:'proto-google-common-protos'
-        exclude group: 'com.google.protobuf', module: 'protobuf-javalite'
-        exclude group: 'com.google.guava',module: 'guava-jdk5'
-        exclude group: 'com.google.firebase', module: 'protolite-well-known-types'
-        resolutionStrategy {
-            force 'com.google.protobuf:protobuf-java:4.29.1'
-        }
-    }
+    // configurations.all 블록 제거
     packagingOptions {
         exclude 'META-INF/INDEX.LIST'
         exclude 'META-INF/DEPENDENCIES'
@@ -55,7 +44,6 @@ android {
     lintOptions {
         checkReleaseBuilds false
     }
-
 }
 
 dependencies {
@@ -79,25 +67,33 @@ dependencies {
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
 
-    implementation platform('com.google.firebase:firebase-bom:33.6.0')
-// CameraX 핵심 기능
+//    // Firebase BOM 추가 (최신 버전 확인)
+//    implementation platform('com.google.firebase:firebase-bom:33.6.0')
+//
+//    // Firestore 의존성 추가 (버전 생략, BOM이 관리)
+//    implementation 'com.google.firebase:firebase-firestore'
+//
+//    // Firebase Analytics 추가
+//    implementation 'com.google.firebase:firebase-analytics'
+
+    // CameraX 핵심 기능
     implementation 'androidx.camera:camera-core:1.4.0'
     implementation 'androidx.camera:camera-view:1.4.0'
     implementation 'androidx.camera:camera-lifecycle:1.4.0'
     implementation 'androidx.appcompat:appcompat:1.6.1' // AppCompat 라이브러리
     // 확장 기능
     implementation 'androidx.camera:camera-extensions:1.4.0'
-    // Firebase Analytics 추가
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
-    // Firestore 추가
-    implementation('com.google.firebase:firebase-firestore')
 
-    // implementation 'com.google.firebase:firebase-auth'
+    // ML Kit Barcode Scanning
+    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
+
+    // Gson 라이브러리
     implementation 'com.google.code.gson:gson:2.8.8'
-    // Google Cloud Vision
-    implementation('com.google.cloud:google-cloud-vision:3.42.0')
+
+    // Protobuf 의존성 명시적으로 추가하지 않음 (Firestore가 내부적으로 관리)
+    // Protobuf 의존성 제거
     implementation 'com.google.protobuf:protobuf-java:4.29.1'
 
-
+    // Google Cloud Vision 의존성 제거 (대체: ML Kit 사용 권장)
+    implementation 'com.google.cloud:google-cloud-vision:3.42.0'
 }
