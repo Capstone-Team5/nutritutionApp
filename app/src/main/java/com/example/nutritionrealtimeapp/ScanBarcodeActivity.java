@@ -479,7 +479,6 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                             isFirstItemProcessed = true;
 
                             // 각 아이템의 정보를 문자열로 추가
-                            nutritionInfo.append("식품명: ").append(foodName != null ? foodName : "N/A").append("\n");
                             nutritionInfo.append("칼로리: ").append(calories != null ? calories : "N/A").append("\n");
                             nutritionInfo.append("단백질: ").append(protein != null ? protein : "N/A").append("\n");
                             nutritionInfo.append("지방: ").append(fat != null ? fat : "N/A").append("\n\n");
