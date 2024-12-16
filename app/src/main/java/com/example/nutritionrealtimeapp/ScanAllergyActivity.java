@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,11 +32,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
+
 import android.os.Environment;
 
 
@@ -45,6 +50,7 @@ public class ScanAllergyActivity extends AppCompatActivity {
     private TextView resultTextView;
     private static ImageAnnotatorClient visionClient;
     private Uri photoURI;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -60,6 +66,9 @@ public class ScanAllergyActivity extends AppCompatActivity {
 
         // text 출력
         captureButton.setOnClickListener(v -> dispatchTakePictureIntent());
+
+        Intent intent = getIntent();
+        ArrayList<String> selectedAllergies = intent.getStringArrayListExtra("selectedAllergies");
     }
 
     private void dispatchTakePictureIntent() {
@@ -192,7 +201,28 @@ public class ScanAllergyActivity extends AppCompatActivity {
 
 
     private void displayText(String visionText) {
-        resultTextView.setText(visionText);
+        sharedPreferences = getSharedPreferences("NutritionApp", Context.MODE_PRIVATE);
+
+        // 저장된 알러기 데이터 로드
+        Set<String> savedAllergies = sharedPreferences.getStringSet("selectedAllergies", new HashSet<>());
+
+        // Set<String>을 ArrayList<String>로 변환
+        ArrayList<String> selectedAllergies = new ArrayList<>(savedAllergies);
+
+        // Vision에서 인식된 텍스트와 알러지 데이터 비교
+        StringBuilder displayMessage = new StringBuilder();
+        if (selectedAllergies != null && !selectedAllergies.isEmpty()) {
+            for (String allergy : selectedAllergies) {
+                if (visionText.contains(allergy)) {
+                    displayMessage.append(allergy).append("포함\n");
+                }
+            }
+        }
+        if(displayMessage.length() == 0){
+            displayMessage.append("없음");
+        }
+
+        resultTextView.setText(displayMessage.toString());
     }
 }
 
