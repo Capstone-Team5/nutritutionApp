@@ -219,7 +219,12 @@ public class ScanAllergyActivity extends AppCompatActivity {
             }
         }
         if(displayMessage.length() == 0){
-            displayMessage.append("없음");
+            if(visionText.contains("시설")||visionText.contains("함유")) {
+                displayMessage.append("없음");
+            }
+            else{
+                displayMessage.append("성분표를 다시 촬영해주세요");
+            }
         }
 
         resultTextView.setText(displayMessage.toString());
