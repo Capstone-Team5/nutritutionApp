@@ -33,16 +33,20 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
-    buildFeatures {
-        compose true
-    }
-    // configurations.all 블록 제거
     packagingOptions {
-        exclude 'META-INF/INDEX.LIST'
-        exclude 'META-INF/DEPENDENCIES'
-    }
-    lintOptions {
-        checkReleaseBuilds false
+        resources {
+            excludes += [
+                    'META-INF/DEPENDENCIES',
+                    'META-INF/LICENSE',
+                    'META-INF/LICENSE.txt',
+                    'META-INF/license.txt',
+                    'META-INF/NOTICE',
+                    'META-INF/NOTICE.txt',
+                    'META-INF/notice.txt',
+                    'META-INF/ASL2.0',
+                    'META-INF/INDEX.LIST'
+            ]
+        }
     }
 }
 
@@ -67,15 +71,6 @@ dependencies {
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
 
-//    // Firebase BOM 추가 (최신 버전 확인)
-//    implementation platform('com.google.firebase:firebase-bom:33.6.0')
-//
-//    // Firestore 의존성 추가 (버전 생략, BOM이 관리)
-//    implementation 'com.google.firebase:firebase-firestore'
-//
-//    // Firebase Analytics 추가
-//    implementation 'com.google.firebase:firebase-analytics'
-
     // CameraX 핵심 기능
     implementation 'androidx.camera:camera-core:1.4.0'
     implementation 'androidx.camera:camera-view:1.4.0'
@@ -90,10 +85,10 @@ dependencies {
     // Gson 라이브러리
     implementation 'com.google.code.gson:gson:2.8.8'
 
-    // Protobuf 의존성 명시적으로 추가하지 않음 (Firestore가 내부적으로 관리)
-    // Protobuf 의존성 제거
-    implementation 'com.google.protobuf:protobuf-java:4.29.1'
-
     // Google Cloud Vision 의존성 제거 (대체: ML Kit 사용 권장)
     implementation 'com.google.cloud:google-cloud-vision:3.42.0'
+
+    implementation 'io.grpc:grpc-okhttp:1.68.2'
+
+
 }
