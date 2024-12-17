@@ -15,6 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Recognized Text Will Appear Here"
+        android:text="이곳에 알러지 포함 여부가 표시됩니다"
         android:textSize="16sp"/>
 </LinearLayout>

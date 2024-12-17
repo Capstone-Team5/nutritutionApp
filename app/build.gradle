@@ -3,9 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-
     id 'com.google.gms.google-services'
-
 }
 
 android {
@@ -35,8 +33,20 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
-    buildFeatures {
-        compose true
+    packagingOptions {
+        resources {
+            excludes += [
+                    'META-INF/DEPENDENCIES',
+                    'META-INF/LICENSE',
+                    'META-INF/LICENSE.txt',
+                    'META-INF/license.txt',
+                    'META-INF/NOTICE',
+                    'META-INF/NOTICE.txt',
+                    'META-INF/notice.txt',
+                    'META-INF/ASL2.0',
+                    'META-INF/INDEX.LIST'
+            ]
+        }
     }
 }
 
@@ -53,7 +63,6 @@ dependencies {
     implementation libs.play.services.code.scanner
     implementation libs.play.services.mlkit.text.recognition.common
     implementation libs.play.services.mlkit.text.recognition.korean
-    implementation libs.androidx.constraintlayout
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
@@ -61,24 +70,25 @@ dependencies {
     androidTestImplementation libs.androidx.ui.test.junit4
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
-    implementation platform('com.google.firebase:firebase-bom:33.6.0')
-// CameraX 핵심 기능
+
+    // CameraX 핵심 기능
     implementation 'androidx.camera:camera-core:1.4.0'
     implementation 'androidx.camera:camera-view:1.4.0'
     implementation 'androidx.camera:camera-lifecycle:1.4.0'
     implementation 'androidx.appcompat:appcompat:1.6.1' // AppCompat 라이브러리
-    // 확장 기능 (선택 사항, 추가 효과 사용 시)
+    // 확장 기능
     implementation 'androidx.camera:camera-extensions:1.4.0'
-    // Firebase Analytics 추가 (선택 사항)
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
-    // 필요한 Firebase 제품 추가
-    // 예: Firestore, Authentication, Realtime Database 등
-    implementation 'com.google.firebase:firebase-firestore'
-    // implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.code.gson:gson:2.8.8'
-    implementation 'com.google.mlkit:text-recognition:16.0.1'
 
-    // 한국어 text recognition
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.1'
+    // ML Kit Barcode Scanning
+    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
+
+    // Gson 라이브러리
+    implementation 'com.google.code.gson:gson:2.8.8'
+
+    // Google Cloud Vision 의존성 제거 (대체: ML Kit 사용 권장)
+    implementation 'com.google.cloud:google-cloud-vision:3.42.0'
+
+    implementation 'io.grpc:grpc-okhttp:1.68.2'
+
+
 }
