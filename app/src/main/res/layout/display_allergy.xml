@@ -8,7 +8,7 @@
         android:id="@+id/captureButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Capture Photo"/>
+        android:text="사진 찍기"/>
 
     <TextView
         android:id="@+id/resultTextView"
