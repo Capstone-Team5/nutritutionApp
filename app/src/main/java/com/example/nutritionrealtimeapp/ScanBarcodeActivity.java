@@ -363,44 +363,6 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             return "영양 정보를 가져오는 동안 오류가 발생했습니다.";
         }
     }
-
-    private String extractMatchingFoodName(String xmlResponse, String inputFoodName) {
-        try {
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setInput(new StringReader(xmlResponse));
-            int eventType = parser.getEventType();
-
-            String tagName = null;
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                switch (eventType) {
-                    case XmlPullParser.START_TAG:
-                        tagName = parser.getName();
-                        break;
-
-                    case XmlPullParser.TEXT:
-                        if ("FOOD_NM_KR".equals(tagName)) {
-                            String foodNameFromResponse = parser.getText().trim();
-                            if (foodNameFromResponse.contains(inputFoodName)) {
-                                Log.d("MATCH_FOUND", "Matched Food Name: " + foodNameFromResponse);
-                                return foodNameFromResponse; // 일치하는 식품 이름 반환
-                            }
-                        }
-                        break;
-
-                    case XmlPullParser.END_TAG:
-                        tagName = null;
-                        break;
-                }
-                eventType = parser.next();
-            }
-        } catch (Exception e) {
-            Log.e("PARSING_ERROR", "Error parsing XML response: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null; // 일치하는 값이 없는 경우 null 반환
-    }
-
-
     /**
      * HTTP GET 요청을 수행하고 응답을 반환하는 메서드
      */
@@ -449,7 +411,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             String calories = null;
             String protein = null;
             String fat = null;
-
+            String carbohydrates = null;
             boolean isFirstItemProcessed = false; // 첫 번째 아이템 처리 여부 확인 변수
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -460,15 +422,21 @@ public class ScanBarcodeActivity extends AppCompatActivity {
 
                     case XmlPullParser.TEXT:
                         String text = parser.getText().trim();
-                        if (!text.isEmpty()&& !isFirstItemProcessed) {
-                            if ("FOOD_NM_KR".equals(tagName)) {
-                                foodName = extractActualFoodName(text);
-                            } else if ("AMT_NUM1".equals(tagName)) {
-                                calories = text + " kcal";
-                            } else if ("AMT_NUM3".equals(tagName)) {
-                                protein = text + " g";
-                            } else if ("AMT_NUM4".equals(tagName)) {
-                                fat = text + " g";
+                        if (!text.isEmpty() && !isFirstItemProcessed) {
+                            try {
+                                if ("FOOD_NM_KR".equals(tagName)) {
+                                    foodName = extractActualFoodName(text);
+                                } else if ("AMT_NUM1".equals(tagName) && selectedNutritionInfo.contains("칼로리")) {
+                                    calories = parseToIntString(text) + " kcal";
+                                } else if ("AMT_NUM2".equals(tagName) && selectedNutritionInfo.contains("탄수화물")) {
+                                    carbohydrates = parseToIntString(text) + " g";
+                                } else if ("AMT_NUM3".equals(tagName) && selectedNutritionInfo.contains("단백질")) {
+                                    protein = parseToIntString(text) + " g";
+                                } else if ("AMT_NUM4".equals(tagName) && selectedNutritionInfo.contains("지방")) {
+                                    fat = parseToIntString(text) + " g";
+                                }
+                            } catch (NumberFormatException e) {
+                                Log.e("XmlParser", "Error parsing value: " + text, e);
                             }
                         }
                         tagName = null; // 한 번 사용 후 초기화
@@ -478,23 +446,44 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                         if ("item".equals(parser.getName()) && !isFirstItemProcessed) {
                             isFirstItemProcessed = true;
 
-                            // 각 아이템의 정보를 문자열로 추가
-                            nutritionInfo.append("칼로리: ").append(calories != null ? calories : "N/A").append("\n");
-                            nutritionInfo.append("단백질: ").append(protein != null ? protein : "N/A").append("\n");
-                            nutritionInfo.append("지방: ").append(fat != null ? fat : "N/A").append("\n\n");
+                            // SharedPreferences에 저장된 영양정보만 표시
+                            if (selectedNutritionInfo.contains("칼로리") && calories != null) {
+                                nutritionInfo.append("칼로리: ").append(calories).append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("탄수화물") && carbohydrates != null) {
+                                nutritionInfo.append("탄수화물: ").append(carbohydrates).append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("단백질") && protein != null) {
+                                nutritionInfo.append("단백질: ").append(protein).append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("지방") && fat != null) {
+                                nutritionInfo.append("지방: ").append(fat).append("\n");
+                            }
+
                             // 다음 아이템을 위해 값 초기화
-                            foodName = calories = protein = fat = null;
+                            foodName = calories = protein = fat = carbohydrates = null;
                         }
                         break;
                 }
                 eventType = parser.next();
             }
         } catch (Exception e) {
-            Log.e("PARSING_ERROR", "Error parsing XML response: " + e.getMessage());
-            e.printStackTrace();
+            Log.e("PARSING_ERROR", "Error parsing XML response: " + e.getMessage(), e);
             return "XML 데이터를 파싱하는 동안 오류가 발생했습니다.";
         }
         return nutritionInfo.toString();
+    }
+
+    /**
+     * 문자열을 정수로 변환하고 실패 시 기본값 반환
+     */
+    private String parseToIntString(String value) {
+        try {
+            return String.valueOf((int) Float.parseFloat(value));
+        } catch (NumberFormatException e) {
+            Log.e("PARSING_ERROR", "Invalid number format for value: " + value, e);
+            return "0"; // 기본값 반환
+        }
     }
 
     protected void onDestroy() {
