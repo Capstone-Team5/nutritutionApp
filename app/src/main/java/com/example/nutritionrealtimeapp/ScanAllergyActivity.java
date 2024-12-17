@@ -59,16 +59,13 @@ public class ScanAllergyActivity extends AppCompatActivity {
         setContentView(R.layout.display_allergy);
 
         resultTextView = findViewById(R.id.resultTextView);
-        Button captureButton = findViewById(R.id.captureButton);
 
         // 요청 권한
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
 
         // text 출력
-        captureButton.setOnClickListener(v -> dispatchTakePictureIntent());
+        dispatchTakePictureIntent();
 
-        Intent intent = getIntent();
-        ArrayList<String> selectedAllergies = intent.getStringArrayListExtra("selectedAllergies");
     }
 
     private void dispatchTakePictureIntent() {
@@ -214,7 +211,7 @@ public class ScanAllergyActivity extends AppCompatActivity {
         if (selectedAllergies != null && !selectedAllergies.isEmpty()) {
             for (String allergy : selectedAllergies) {
                 if (visionText.contains(allergy)) {
-                    displayMessage.append(allergy).append("포함\n");
+                    displayMessage.append(allergy).append(" 함유\n");
                 }
             }
         }
