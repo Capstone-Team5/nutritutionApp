@@ -31,6 +31,7 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.saveButton);
 
         sharedPreferences = getSharedPreferences("NutritionApp", Context.MODE_PRIVATE);
+        boolean isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch", true);
 
         // 저장된 값이 있으면 체크박스 상태 복원
         Set<String> savedNutritionInfoSet = sharedPreferences.getStringSet("selectedNutritionInfo", null);
@@ -55,9 +56,16 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
                 // SharedPreferences에 선택한 데이터 저장
                 saveNutritionInfoToPreferences(selectedNutritionInfo);
 
-                Intent intent = new Intent(SelectNutritionInfoActivity.this, SelectModeActivity.class);
-                startActivity(intent);
-                finish(); // 현재 액티비티 종료
+                if(isFirstLaunch) {
+                    Intent intent = new Intent(this, SelectModeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Intent intent = new Intent(this, ScanBarcodeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }

@@ -27,6 +27,8 @@ public class SelectModeActivity extends AppCompatActivity {
         saveAllergyButton = findViewById(R.id.saveAllergyButton);
 
         SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
+        boolean isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch", true);
+
 
         boolean isVoiceMode = sharedPreferences.getBoolean("voiceMode", false);
         boolean isBrailleMode = sharedPreferences.getBoolean("brailleMode", false);
@@ -72,9 +74,19 @@ public class SelectModeActivity extends AppCompatActivity {
 
             Toast.makeText(this, "모드가 저장되었습니다", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(SelectModeActivity.this, ScanBarcodeActivity.class);
-            startActivity(intent);
-            finish();
+            if(isFirstLaunch) {
+                editor = sharedPreferences.edit();
+                editor.putBoolean("isFirstLaunch", false);
+                editor.apply();
+                Intent intent = new Intent(this, ScanBarcodeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                Intent intent = new Intent(this, ScanBarcodeActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 }
