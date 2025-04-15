@@ -78,6 +78,19 @@
         android:fontFamily="sans-serif-medium"
         android:padding="12dp"
         android:backgroundTint="@color/accent"
+        android:textColor="@color/button_text"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 모드 수정 버튼 -->
+    <Button
+        android:id="@+id/editModeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="모드 수정"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="12dp"
+        android:backgroundTint="@color/accent"
         android:textColor="@color/button_text" />
 
 </LinearLayout>
