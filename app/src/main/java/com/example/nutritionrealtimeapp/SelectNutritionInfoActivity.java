@@ -30,7 +30,6 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
         CheckBox checkBoxCarbs = findViewById(R.id.checkBox_carbs);
         Button saveButton = findViewById(R.id.saveButton);
 
-        // SharedPreferences 초기화
         sharedPreferences = getSharedPreferences("NutritionApp", Context.MODE_PRIVATE);
 
         // 저장된 값이 있으면 체크박스 상태 복원
@@ -56,9 +55,7 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
                 // SharedPreferences에 선택한 데이터 저장
                 saveNutritionInfoToPreferences(selectedNutritionInfo);
 
-                // ScanBarcodeActivity로 이동
-                Intent intent = new Intent(SelectNutritionInfoActivity.this, ScanBarcodeActivity.class);
-                intent.putStringArrayListExtra("selectedNutritionInfo", (ArrayList<String>) selectedNutritionInfo);
+                Intent intent = new Intent(SelectNutritionInfoActivity.this, SelectModeActivity.class);
                 startActivity(intent);
                 finish(); // 현재 액티비티 종료
             }

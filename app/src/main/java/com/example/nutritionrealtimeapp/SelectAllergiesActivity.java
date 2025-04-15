@@ -15,7 +15,7 @@ public class SelectAllergiesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_allergies);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("AllergyPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
 
         CheckBox checkBoxPeanut = findViewById(R.id.checkBox_peanut);
         CheckBox checkBoxDairy = findViewById(R.id.checkBox_dairy);
