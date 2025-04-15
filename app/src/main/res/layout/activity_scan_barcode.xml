@@ -57,7 +57,7 @@
 
     <!-- 영양정보 수정 버튼 -->
     <Button
-        android:id="@+id/editButton"
+        android:id="@+id/nutritionEditButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="영양정보 수정"

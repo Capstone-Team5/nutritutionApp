@@ -42,9 +42,6 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
             if (savedNutritionInfoSet.contains("탄수화물")) checkBoxCarbs.setChecked(true);
         }
 
-        // 유저 ID 생성/불러오기
-        String userId = getOrCreateUserId();
-
         // 저장 버튼 클릭 이벤트
         saveButton.setOnClickListener(v -> {
             List<String> selectedNutritionInfo = new ArrayList<>();
@@ -66,23 +63,6 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
                 finish(); // 현재 액티비티 종료
             }
         });
-    }
-
-    // SharedPreferences에 UUID 저장 및 불러오기
-    private String getOrCreateUserId() {
-        String userId = sharedPreferences.getString("userId", null);
-
-        if (userId == null) {
-            // UUID 생성
-            userId = UUID.randomUUID().toString();
-
-            // SharedPreferences에 저장
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("userId", userId);
-            editor.apply();
-        }
-
-        return userId;
     }
 
     // SharedPreferences에 영양 정보를 저장
