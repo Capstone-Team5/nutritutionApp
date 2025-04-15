@@ -26,6 +26,17 @@ public class SelectModeActivity extends AppCompatActivity {
         checkVisual = findViewById(R.id.visual_mode);
         saveAllergyButton = findViewById(R.id.saveAllergyButton);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
+
+        boolean isVoiceMode = sharedPreferences.getBoolean("voiceMode", false);
+        boolean isBrailleMode = sharedPreferences.getBoolean("brailleMode", false);
+        boolean isVisualMode = sharedPreferences.getBoolean("visualMode", false);
+
+        checkVoice.setChecked(isVoiceMode);
+        checkBraille.setChecked(isBrailleMode);
+        checkVisual.setChecked(isVisualMode);
+
+
         // 하나만 체크되도록 리스너 설정
         checkVoice.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -50,7 +61,6 @@ public class SelectModeActivity extends AppCompatActivity {
 
         // 버튼 클릭 시 저장
         saveAllergyButton.setOnClickListener(v -> {
-            SharedPreferences sharedPreferences = getSharedPreferences("ModePrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
             // 선택된 모드 저장

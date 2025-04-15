@@ -22,12 +22,20 @@ public class SelectAllergiesActivity extends AppCompatActivity {
         CheckBox checkBoxGluten = findViewById(R.id.checkBox_gluten);
         Button saveAllergyButton = findViewById(R.id.saveAllergyButton);
 
+        boolean savedPeanut = sharedPreferences.getBoolean("peanut", false);
+        boolean savedDairy = sharedPreferences.getBoolean("dairy", false);
+        boolean savedGluten = sharedPreferences.getBoolean("gluten", false);
+
+        checkBoxPeanut.setChecked(savedPeanut);
+        checkBoxDairy.setChecked(savedDairy);
+        checkBoxGluten.setChecked(savedGluten);
+
         saveAllergyButton.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putBoolean("땅콩", checkBoxPeanut.isChecked());
-            editor.putBoolean("우유", checkBoxDairy.isChecked());
-            editor.putBoolean("글루틴", checkBoxGluten.isChecked());
+            editor.putBoolean("peanut", checkBoxPeanut.isChecked());
+            editor.putBoolean("dairy", checkBoxDairy.isChecked());
+            editor.putBoolean("gluten", checkBoxGluten.isChecked());
             editor.putBoolean("isFirstLaunch", false);
             editor.apply(); // 저장
 
