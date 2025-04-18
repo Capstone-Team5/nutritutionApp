@@ -30,8 +30,8 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
         CheckBox checkBoxCarbs = findViewById(R.id.checkBox_carbs);
         Button saveButton = findViewById(R.id.saveButton);
 
-        // SharedPreferences 초기화
         sharedPreferences = getSharedPreferences("NutritionApp", Context.MODE_PRIVATE);
+        boolean isFirstLaunch = sharedPreferences.getBoolean("isFirstLaunch", true);
 
         // 저장된 값이 있으면 체크박스 상태 복원
         Set<String> savedNutritionInfoSet = sharedPreferences.getStringSet("selectedNutritionInfo", null);
@@ -41,9 +41,6 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
             if (savedNutritionInfoSet.contains("지방")) checkBoxFat.setChecked(true);
             if (savedNutritionInfoSet.contains("탄수화물")) checkBoxCarbs.setChecked(true);
         }
-
-        // 유저 ID 생성/불러오기
-        String userId = getOrCreateUserId();
 
         // 저장 버튼 클릭 이벤트
         saveButton.setOnClickListener(v -> {
@@ -59,30 +56,18 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
                 // SharedPreferences에 선택한 데이터 저장
                 saveNutritionInfoToPreferences(selectedNutritionInfo);
 
-                // ScanBarcodeActivity로 이동
-                Intent intent = new Intent(SelectNutritionInfoActivity.this, ScanBarcodeActivity.class);
-                intent.putStringArrayListExtra("selectedNutritionInfo", (ArrayList<String>) selectedNutritionInfo);
-                startActivity(intent);
-                finish(); // 현재 액티비티 종료
+                if(isFirstLaunch) {
+                    Intent intent = new Intent(this, SelectModeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Intent intent = new Intent(this, ScanBarcodeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
-    }
-
-    // SharedPreferences에 UUID 저장 및 불러오기
-    private String getOrCreateUserId() {
-        String userId = sharedPreferences.getString("userId", null);
-
-        if (userId == null) {
-            // UUID 생성
-            userId = UUID.randomUUID().toString();
-
-            // SharedPreferences에 저장
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("userId", userId);
-            editor.apply();
-        }
-
-        return userId;
     }
 
     // SharedPreferences에 영양 정보를 저장

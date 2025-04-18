@@ -59,6 +59,7 @@
         <activity android:name=".ScanBarcodeActivity" />
         <activity android:name=".DisplayNutritionActivity" />
         <activity android:name=".ScanAllergyActivity"/>
+        <activity android:name=".SelectModeActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.nutritionrealtimeapp.fileprovider"
