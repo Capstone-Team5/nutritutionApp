@@ -13,13 +13,44 @@
         android:textSize="18sp"
         android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:id="@+id/nutritionInfoTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:layout_marginBottom="32dp"
-        android:text="선택된 영양정보가 없습니다."
-        android:textSize="16sp" />
+    <!-- 스크롤 뷰 추가 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scrollbars="vertical">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+            <TextView
+                android:id="@+id/nutritionInfoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:text="선택된 영양정보가 없습니다."
+                android:textSize="16sp" />
+
+        </HorizontalScrollView>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnDecrease"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="30sp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnIncrease"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textSize="30sp"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/brailleButton"

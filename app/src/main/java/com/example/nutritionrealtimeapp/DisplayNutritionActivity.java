@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,11 +48,41 @@ public class DisplayNutritionActivity extends AppCompatActivity {
         TextView nutritionInfoTextView = findViewById(R.id.nutritionInfoTextView);
         Button speechButton = findViewById(R.id.speechButton);
         Button brailleButton = findViewById(R.id.brailleButton);
+        Button btnIncrease = findViewById(R.id.btnIncrease);
+        Button btnDecrease = findViewById(R.id.btnDecrease);
 
         String barcode = getIntent().getStringExtra("barcode");
         String foodName = getIntent().getStringExtra("foodName");
         String nutritionInfo = getIntent().getStringExtra("nutritionInfo");
 
+        //SharedPreferecnes에서 visualMode 조회
+        boolean isVisualMode = getSharedPreferences("NutritionApp", MODE_PRIVATE)
+                                .getBoolean("visualMode", false);
+
+        if(isVisualMode) {
+            // 초기 텍스트 크기 24sp 설정
+            nutritionInfoTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+            nutritionInfoTextView.setMovementMethod(new ScrollingMovementMethod());
+
+            // 버튼 가시성 설정
+            btnIncrease.setVisibility(View.VISIBLE);
+            btnDecrease.setVisibility(View.VISIBLE);
+
+            // 글씨 크기 증가 버튼
+            btnIncrease.setOnClickListener(v -> {
+                float currentSize = nutritionInfoTextView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                nutritionInfoTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentSize + 2);
+            });
+
+            // 글씨 크기 감소 버튼
+            btnDecrease.setOnClickListener(v -> {
+                float currentSize = nutritionInfoTextView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                if (currentSize > 12) {
+                    nutritionInfoTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentSize - 2);
+                }
+            });
+        }
+        
         barcodeTextView.setText(barcode != null && !barcode.isEmpty() ? "바코드: " + barcode : "바코드 정보가 없습니다");
         nutritionInfoTextView.setText(foodName != null && !foodName.isEmpty() ? "식품명: " + foodName : "식품명이 없습니다");
         if (nutritionInfo != null && !nutritionInfo.isEmpty()) {
