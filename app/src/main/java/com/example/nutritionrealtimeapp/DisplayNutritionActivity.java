@@ -81,6 +81,9 @@ public class DisplayNutritionActivity extends AppCompatActivity {
                     nutritionInfoTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, currentSize - 2);
                 }
             });
+        } else {
+            btnIncrease.setVisibility(View.GONE);
+            btnDecrease.setVisibility(View.GONE);
         }
         
         barcodeTextView.setText(barcode != null && !barcode.isEmpty() ? "바코드: " + barcode : "바코드 정보가 없습니다");
