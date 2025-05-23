@@ -92,6 +92,258 @@
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
+        <!-- 체크박스 5: 식이섬유 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_dietaryFiber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="식이섬유"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 6: 칼슘 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_calcium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="칼슘"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 7: 나트륨 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_sodium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="나트륨"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 8: 비타민 A -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_vitaminA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비타민 A"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 9: 비타민 C -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_vitaminC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비타민 C"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 10: 비타민 D -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_vitaminD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비타민 D"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 11: 콜레스테롤 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_cholesterol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="콜레스테롤"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 12: 포화지방산 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_saturatedFattyAcids"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="포화지방산"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 13: 트랜스지방산 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_transFattyAcids"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="트랜스지방산"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 14: 과당 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_fructose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="과당"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 15: 유당 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_lactose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="유당"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 16: 카페인 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_caffeine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="카페인"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 17: 마그네슘 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_magnesium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="마그네슘"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스 18: 원산지국명 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="원산지"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
         <!-- 저장 버튼 -->
         <Button
             android:id="@+id/saveButton"
