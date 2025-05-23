@@ -2,19 +2,32 @@ package com.example.nutritionrealtimeapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.tts.TextToSpeech;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.text.SpannableStringBuilder;
+
 import android.util.Log;
 import android.util.Xml;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import android.view.View;
+import android.widget.Button;
+import androidx.core.view.GravityCompat;
 
 //import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.vision.barcode.common.Barcode;
@@ -53,6 +66,8 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +83,10 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         Button scanAllergyButton = findViewById(R.id.scanAllergyButton);
         Button editModeButton = findViewById(R.id.editModeButton);
 
+        //햄버거바
+        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        Button openDrawerButton = findViewById(R.id.openDrawerButton);
+
         // SharedPreferences에서 데이터 로드
         selectedNutritionInfo = new ArrayList<>(sharedPreferences.getStringSet("selectedNutritionInfo", new HashSet<>()));
         selectedAllergies = new ArrayList<>(sharedPreferences.getStringSet("selectedAllergies", new HashSet<>()));
@@ -78,18 +97,51 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             }
         });
 
-        // 영양정보와 알레르기 정보를 화면에 표시
+        // 영양정보 정보를 화면에 표시
         if (!selectedNutritionInfo.isEmpty()) {
-            nutritionInfoTextView.setText("선택한 영양정보: " + String.join(", ", selectedNutritionInfo));
+            SpannableStringBuilder nutritionBuilder = new SpannableStringBuilder();
+
+            nutritionBuilder.append("[ 선택한 영양 정보 ]\n\n");
+
+
+            for (String item : selectedNutritionInfo) {
+                SpannableString boldItem = new SpannableString(item + "\n");
+                nutritionBuilder.append(item).append("\n");
+            }
+
+            nutritionInfoTextView.setText(nutritionBuilder);
+            nutritionInfoTextView.setGravity(Gravity.CENTER);
+            nutritionInfoTextView.setLineSpacing(10, 1);
+
         } else {
             nutritionInfoTextView.setText("선택된 영양정보가 없습니다.");
+            nutritionInfoTextView.setGravity(Gravity.CENTER);
         }
 
+        // 알르레기 정보를 화면에 표시
         if (!selectedAllergies.isEmpty()) {
-            allergyInfoTextView.setText("선택한 알레르기: " + String.join(", ", selectedAllergies));
+            SpannableStringBuilder allergyBuilder = new SpannableStringBuilder();
+            allergyBuilder.append("[ 선택한 알레르기 정보 ]\n\n");
+
+            for (String item : selectedAllergies) {
+                allergyBuilder.append(item).append("\n");
+            }
+
+            allergyInfoTextView.setText(allergyBuilder);
+            allergyInfoTextView.setGravity(Gravity.CENTER);
+            allergyInfoTextView.setLineSpacing(10, 1); // 줄 간격 추가
         } else {
             allergyInfoTextView.setText("선택된 알레르기가 없습니다.");
+            allergyInfoTextView.setGravity(Gravity.CENTER);
         }
+
+        //햄버거 버튼 클릭시 사이드 바 열기
+        openDrawerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.END);
+            }
+        });
 
         // 바코드 스캔 버튼 클릭 이벤트
         scanButton.setOnClickListener(v -> startBarcodeScanner());

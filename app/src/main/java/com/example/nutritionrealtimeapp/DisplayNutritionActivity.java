@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,6 +95,7 @@ public class DisplayNutritionActivity extends AppCompatActivity {
 
     private void checkBluetoothSupportAndEnable(String dataToSend) {
         if (bluetoothAdapter == null) return;
+
 
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -237,4 +242,5 @@ public class DisplayNutritionActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
+
 }

@@ -1,32 +1,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wholeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    android:background="#3A634A">
+    android:background="#31543f"
+    android:clickable="true"
+    android:focusable="true"
+    >
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="382dp"
-        android:layout_height="384dp"
-        android:src="@drawable/main_logo" />
+        android:layout_width="400dp"
+        android:layout_height="450dp"
+        android:src="@drawable/main_logo"
+        />
     <TextView
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="영양 정보 스캔 앱"
-        android:textSize="24sp"
+        android:textSize="35sp"
         android:textColor= "#FFFFFF"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginBottom="32dp" />
+        android:letterSpacing="0.2"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="28dp" />
 
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:text="시작하기"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_border"
-        android:textColor= "#FFFFFF"
-        android:padding="16dp"/>
+
 </LinearLayout>

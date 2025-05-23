@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="android:fontFamily">@font/pretendard_medium</item> <!--글꼴-->
+        <item name="fontFamily">@font/pretendard_medium</item> <!-- AppCompat 호환 -->
     </style>
 
 
