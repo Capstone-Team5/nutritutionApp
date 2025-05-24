@@ -1,0 +1,5 @@
+.idea/
+local.properties
+*.bin
+*.lock
+app/src/main/res/raw/ocr.json
