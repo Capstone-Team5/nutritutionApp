@@ -36,18 +36,20 @@
         android:layout_marginTop="8dp">
 
         <Button
-        android:id="@+id/btnDecrease"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="-"/>
+            android:id="@+id/btnDecrease"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="-"/>
 
-    <Button
-        android:id="@+id/btnIncrease"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="+"/>
+        <Button
+            android:id="@+id/btnIncrease"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="+"/>
 
     </LinearLayout>
 
