@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_potassium"
@@ -132,7 +132,9 @@
                 android:layout_height="wrap_content"
                 android:text="칼륨"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -142,7 +144,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_sodium"
@@ -150,7 +152,9 @@
                 android:layout_height="wrap_content"
                 android:text="나트륨"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -160,7 +164,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_cholesterol"
@@ -168,7 +172,9 @@
                 android:layout_height="wrap_content"
                 android:text="콜레스테롤"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -178,7 +184,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_saturatedFattyAcids"
@@ -186,7 +192,9 @@
                 android:layout_height="wrap_content"
                 android:text="포화지방산"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -196,7 +204,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_caffeine"
@@ -204,7 +212,9 @@
                 android:layout_height="wrap_content"
                 android:text="카페인"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -214,7 +224,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_mass"
@@ -222,7 +232,9 @@
                 android:layout_height="wrap_content"
                 android:text="질량"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -232,7 +244,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_country"
@@ -240,7 +252,9 @@
                 android:layout_height="wrap_content"
                 android:text="원산지"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
