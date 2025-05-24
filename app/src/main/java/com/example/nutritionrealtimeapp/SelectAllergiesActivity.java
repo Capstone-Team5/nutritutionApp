@@ -26,6 +26,17 @@ public class SelectAllergiesActivity extends AppCompatActivity {
         CheckBox checkBoxPeanut = findViewById(R.id.checkBox_peanut);
         CheckBox checkBoxDairy = findViewById(R.id.checkBox_dairy);
         CheckBox checkBoxGluten = findViewById(R.id.checkBox_gluten);
+        CheckBox checkBoxEgg = findViewById(R.id.checkBox_egg);
+        CheckBox checkBoxWalnuts = findViewById(R.id.checkBox_walnuts);
+        CheckBox checkBoxAlmond = findViewById(R.id.checkBox_almond);
+        CheckBox checkBoxShrimp = findViewById(R.id.checkBox_shrimp);
+        CheckBox checkBoxCrab = findViewById(R.id.checkBox_crab);
+        CheckBox checkBoxSesameSeeds = findViewById(R.id.checkBox_sesameSeeds);
+        CheckBox checkBoxGarlic = findViewById(R.id.checkBox_garlic);
+        CheckBox checkBoxPeach = findViewById(R.id.checkBox_peach);
+        CheckBox checkBoxKiwi = findViewById(R.id.checkBox_kiwi);
+        CheckBox checkBoxApple = findViewById(R.id.checkBox_apple);
+
         Button saveAllergyButton = findViewById(R.id.saveAllergyButton);
 
         // 저장된 알레르기 목록 불러오기
@@ -35,12 +46,33 @@ public class SelectAllergiesActivity extends AppCompatActivity {
         checkBoxPeanut.setChecked(savedAllergies.contains("땅콩"));
         checkBoxDairy.setChecked(savedAllergies.contains("유제품"));
         checkBoxGluten.setChecked(savedAllergies.contains("글루텐"));
+        checkBoxEgg.setChecked(savedAllergies.contains("달걀"));
+        checkBoxWalnuts.setChecked(savedAllergies.contains("호두"));
+        checkBoxAlmond.setChecked(savedAllergies.contains("아몬드"));
+        checkBoxShrimp.setChecked(savedAllergies.contains("새우"));
+        checkBoxCrab.setChecked(savedAllergies.contains("게"));
+        checkBoxSesameSeeds.setChecked(savedAllergies.contains("참깨"));
+        checkBoxGarlic.setChecked(savedAllergies.contains("마늘"));
+        checkBoxPeach.setChecked(savedAllergies.contains("복숭아"));
+        checkBoxKiwi.setChecked(savedAllergies.contains("키위"));
+        checkBoxApple.setChecked(savedAllergies.contains("사과"));
 
         saveAllergyButton.setOnClickListener(v -> {
             Set<String> selectedAllergies = new HashSet<>();
             if (checkBoxPeanut.isChecked()) selectedAllergies.add("땅콩");
             if (checkBoxDairy.isChecked()) selectedAllergies.add("유제품");
             if (checkBoxGluten.isChecked()) selectedAllergies.add("글루텐");
+            if (checkBoxEgg.isChecked()) selectedAllergies.add("달걀");
+            if (checkBoxWalnuts.isChecked()) selectedAllergies.add("호두");
+            if (checkBoxAlmond.isChecked()) selectedAllergies.add("아몬드");
+            if (checkBoxShrimp.isChecked()) selectedAllergies.add("새우");
+            if (checkBoxCrab.isChecked()) selectedAllergies.add("게");
+            if (checkBoxSesameSeeds.isChecked()) selectedAllergies.add("참깨");
+            if (checkBoxGarlic.isChecked()) selectedAllergies.add("마늘");
+            if (checkBoxPeach.isChecked()) selectedAllergies.add("복숭아");
+            if (checkBoxKiwi.isChecked()) selectedAllergies.add("키위");
+            if (checkBoxApple.isChecked()) selectedAllergies.add("사과");
+
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putStringSet(KEY_SELECTED_ALLERGIES, selectedAllergies);

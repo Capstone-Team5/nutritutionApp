@@ -10,14 +10,6 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <EditText
-            android:id="@+id/searchEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="알레르기명을 입력하세요"
-            android:inputType="text"
-            android:layout_marginBottom="12dp"/>
-
         <!-- 안내 텍스트 -->
         <TextView
             android:layout_width="wrap_content"
