@@ -3,7 +3,13 @@ package com.example.nutritionrealtimeapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -25,9 +31,10 @@ public class MainActivity extends AppCompatActivity {
             finish(); // MainActivity 종료
         } else {
             // 앱 처음 실행시
-            Button startButton = findViewById(R.id.startButton);
-            startButton.setOnClickListener(v -> {
-                // SelectAllergiesActivity로 이동
+            LinearLayout layout = findViewById(R.id.wholeLayout);
+
+            // 화면 클릭시, 실행
+            layout.setOnClickListener(v -> {
                 Intent intent = new Intent(this, SelectAllergiesActivity.class);
                 startActivity(intent);
             });

@@ -11,14 +11,27 @@
         android:gravity="center">
 
         <!-- 안내 텍스트 -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="필요한 영양정보를 선택하세요:"
-            android:textSize="18sp"
-            android:textColor="@color/text_primary"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium" />
+            android:text="영양정보 선택"
+            android:textSize="35sp"
+            android:layout_marginTop="50dp"
+            android:letterSpacing="0.2"
+            android:textStyle="bold"
+            android:textColor="#38332d"
+            />
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:letterSpacing="0.1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="선택한 영양 성분의 함유량을 알려드립니다"
+            />
 
         <!-- 체크박스 1: 칼로리 -->
         <LinearLayout
@@ -26,16 +39,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_calories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="칼로리"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="8dp"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:fontFamily="sans-serif" />
+                android:textSize="28sp"
+                 />
+
         </LinearLayout>
 
         <!-- 체크박스 2: 단백질 -->
@@ -44,7 +62,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_protein"
@@ -52,8 +70,12 @@
                 android:layout_height="wrap_content"
                 android:text="단백질"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:fontFamily="sans-serif" />
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                />
+
         </LinearLayout>
 
         <!-- 체크박스 3: 지방 -->
@@ -62,15 +84,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_fat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="지방"
+                android:text=" 지방"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -80,25 +104,28 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/checkBox_carbs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="탄수화물"
+                android:text=" 탄수화물"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
         <!-- 저장 버튼 -->
         <Button
             android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:text="저장"
-            style="@style/PrimaryButton"
-            android:layout_marginTop="24dp" />
+            android:textSize="28sp"
+            android:background="@drawable/rounded_button_background"
+            android:layout_marginTop="83dp" />
     </LinearLayout>
 </ScrollView>

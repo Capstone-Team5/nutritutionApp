@@ -23,7 +23,7 @@
 
     <Button
         android:id="@+id/brailleButton"
-        android:layout_width="match_parent"
+        android:layout_width="372dp"
         android:layout_height="wrap_content"
         android:text="점자로 변환" />
 
@@ -32,4 +32,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="음성으로 읽기" />
+
 </LinearLayout>

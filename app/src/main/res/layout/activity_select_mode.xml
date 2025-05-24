@@ -13,26 +13,44 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="모드를 선택하세요:"
-            android:textSize="18sp"
-            android:textColor="@color/text_primary"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium" />
+            android:text="모드 선택"
+            android:textSize="35sp"
+            android:layout_marginTop="50dp"
+            android:letterSpacing="0.2"
+            android:textStyle="bold"
+            android:textColor="#38332d"
+             />
+
+        <TextView
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:letterSpacing="0.1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="선택한 모드로 해당 정보를 알려드립니다"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="10dp">
+
 
             <CheckBox
                 android:id="@+id/voice_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="음성 모드"
+                android:text="🔊  음성 모드"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -41,15 +59,19 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/braille_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="점자 모드"
+                android:text="🤙🏻  점자 모드"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="8dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -58,25 +80,29 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginStart="10dp">
 
             <CheckBox
                 android:id="@+id/visual_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="시각화 모드"
+                android:text="👀  시각화 모드"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:padding="8dp"
                 android:textColor="@color/text_primary"
-                android:textSize="18sp"
+                android:textSize="28sp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
         <!-- 저장 버튼 -->
         <Button
             android:id="@+id/saveAllergyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:text="저장"
-            style="@style/PrimaryButton"
-            android:layout_marginTop="24dp" />
+            android:textSize="28sp"
+            android:background="@drawable/rounded_button_background"
+            android:layout_marginTop="120dp" />
     </LinearLayout>
 </ScrollView>
