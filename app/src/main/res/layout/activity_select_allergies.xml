@@ -10,12 +10,19 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="알레르기명을 입력하세요"
+            android:inputType="text"
+            android:layout_marginBottom="12dp"/>
 
         <!-- 안내 텍스트 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알르레기 선택"
+            android:text="알레르기 선택"
             android:textSize="35sp"
             android:layout_marginTop="50dp"
             android:letterSpacing="0.2"
@@ -50,7 +57,7 @@
                 android:minHeight="48dp"
                 android:padding="8dp"
                 android:textColor="@color/text_primary"
-                android:textSize="28sp"
+                android:textSize="18sp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 
@@ -94,6 +101,186 @@
                 android:padding="8dp"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 달걀 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_egg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="달걀"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 호두 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_walnuts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="호두"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 아몬드 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_almond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="아몬드"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 새우 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_shrimp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="새우"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 게 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_crab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="게"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 참깨 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_sesameSeeds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="참깨"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 마늘 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_garlic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="마늘"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 복숭아 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_peach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="복숭아"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 키위 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_kiwi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="키위"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+
+        <!-- 체크박스: 사과 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <CheckBox
+                android:id="@+id/checkBox_apple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사과"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
                 android:fontFamily="sans-serif" />
         </LinearLayout>
 

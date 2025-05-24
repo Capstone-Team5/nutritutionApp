@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -59,6 +61,32 @@ public class ScanAllergyActivity extends AppCompatActivity {
         setContentView(R.layout.display_allergy);
 
         resultTextView = findViewById(R.id.resultTextView);
+        LinearLayout fontControlLayout = findViewById(R.id.fontControlLayout);
+
+        Button btnIncrease = findViewById(R.id.btnIncrease);
+        Button btnDecrease = findViewById(R.id.btnDecrease);
+
+        // visualMode 값 확인
+        SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
+        boolean isVisualMode = sharedPreferences.getBoolean("visualMode", false);
+
+        if (isVisualMode) {
+            // 글씨 크게, 버튼 보이기
+            resultTextView.setTextSize(28);
+            fontControlLayout.setVisibility(View.VISIBLE);
+
+            btnIncrease.setOnClickListener(v -> {
+                float currentSize = resultTextView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                resultTextView.setTextSize(currentSize + 2);
+            });
+
+            btnDecrease.setOnClickListener(v -> {
+                float currentSize = resultTextView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                if (currentSize > 12) resultTextView.setTextSize(currentSize - 2);
+            });
+        } else {
+            fontControlLayout.setVisibility(View.GONE);
+        }
 
         // 요청 권한
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);

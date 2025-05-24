@@ -4,11 +4,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/resultTextView"
+    <!-- 스크롤 뷰 추가 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scrollbars="vertical">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+            <TextView
+                android:id="@+id/resultTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="이곳에 알러지 포함 여부가 표시됩니다"
+                android:textSize="16sp"/>
+
+        </HorizontalScrollView>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/fontControlLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="이곳에 알러지 포함 여부가 표시됩니다"
-        android:textSize="16sp"/>
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btnDecrease"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="-"/>
+
+        <Button
+            android:id="@+id/btnIncrease"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="+"/>
+
+    </LinearLayout>
+
 </LinearLayout>

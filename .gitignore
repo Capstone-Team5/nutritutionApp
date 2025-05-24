@@ -1,5 +1,6 @@
-.idea/
-local.properties
-*.bin
+.gradle/
 *.lock
+*.bin
+local.properties
 app/src/main/res/raw/ocr.json
+.idea/
