@@ -510,7 +510,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                                 }  else if ("AMT_NUM121".equals(tagName) && selectedNutritionInfo.contains("카페인")) {
                                     caffeine = parseToIntString(text) + " mg";
                                 } else if ("Z10500".equals(tagName) && selectedNutritionInfo.contains("질량")) {
-                                    mass = parseToIntString(text);
+                                    mass = text;
                                 } else if ("NATION_NM".equals(tagName) && selectedNutritionInfo.contains("원산지")) {
                                     country = parseToIntString(text);
                                 }
