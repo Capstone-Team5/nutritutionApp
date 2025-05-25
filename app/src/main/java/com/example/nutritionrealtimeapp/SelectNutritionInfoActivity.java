@@ -1,5 +1,6 @@
 package com.example.nutritionrealtimeapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,14 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
         CheckBox checkBoxProtein = findViewById(R.id.checkBox_protein);
         CheckBox checkBoxFat = findViewById(R.id.checkBox_fat);
         CheckBox checkBoxCarbs = findViewById(R.id.checkBox_carbs);
+        CheckBox checkBoxPotassium = findViewById(R.id.checkBox_potassium);
+        CheckBox checkBoxSodium = findViewById(R.id.checkBox_sodium);
+        CheckBox checkBoxCholesterol = findViewById(R.id.checkBox_cholesterol);
+        CheckBox checkBoxSaturatedFA = findViewById(R.id.checkBox_saturatedFattyAcids);
+        CheckBox checkBoxCaffeine = findViewById(R.id.checkBox_caffeine);
+        CheckBox checkBoxMass = findViewById(R.id.checkBox_mass);
+        CheckBox checkBoxCountry = findViewById(R.id.checkBox_country);
+
         Button saveButton = findViewById(R.id.saveButton);
 
         sharedPreferences = getSharedPreferences("NutritionApp", Context.MODE_PRIVATE);
@@ -40,6 +49,13 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
             if (savedNutritionInfoSet.contains("단백질")) checkBoxProtein.setChecked(true);
             if (savedNutritionInfoSet.contains("지방")) checkBoxFat.setChecked(true);
             if (savedNutritionInfoSet.contains("탄수화물")) checkBoxCarbs.setChecked(true);
+            if (savedNutritionInfoSet.contains("칼륨")) checkBoxPotassium.setChecked(true);
+            if (savedNutritionInfoSet.contains("나트륨")) checkBoxSodium.setChecked(true);
+            if (savedNutritionInfoSet.contains("콜레스테롤")) checkBoxCholesterol.setChecked(true);
+            if (savedNutritionInfoSet.contains("포화지방산")) checkBoxSaturatedFA.setChecked(true);
+            if (savedNutritionInfoSet.contains("카페인")) checkBoxCaffeine.setChecked(true);
+            if (savedNutritionInfoSet.contains("질량")) checkBoxMass.setChecked(true);
+            if (savedNutritionInfoSet.contains("원산지")) checkBoxCountry.setChecked(true);
         }
 
         // 저장 버튼 클릭 이벤트
@@ -49,6 +65,13 @@ public class SelectNutritionInfoActivity extends AppCompatActivity {
             if (checkBoxProtein.isChecked()) selectedNutritionInfo.add("단백질");
             if (checkBoxFat.isChecked()) selectedNutritionInfo.add("지방");
             if (checkBoxCarbs.isChecked()) selectedNutritionInfo.add("탄수화물");
+            if (checkBoxPotassium.isChecked()) selectedNutritionInfo.add("칼륨");
+            if (checkBoxSodium.isChecked()) selectedNutritionInfo.add("나트륨");
+            if (checkBoxCholesterol.isChecked()) selectedNutritionInfo.add("콜레스테롤");
+            if (checkBoxSaturatedFA.isChecked()) selectedNutritionInfo.add("포화지방산");
+            if (checkBoxCaffeine.isChecked()) selectedNutritionInfo.add("카페인");
+            if (checkBoxMass.isChecked()) selectedNutritionInfo.add("질량");
+            if (checkBoxCountry.isChecked()) selectedNutritionInfo.add("원산지");
 
             if (selectedNutritionInfo.isEmpty()) {
                 Toast.makeText(this, "최소한 하나의 영양정보를 선택하세요!", Toast.LENGTH_SHORT).show();

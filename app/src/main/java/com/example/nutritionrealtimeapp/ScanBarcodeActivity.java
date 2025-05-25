@@ -469,6 +469,14 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             String protein = null;
             String fat = null;
             String carbohydrates = null;
+            String potassium = null;
+            String sodium = null;
+            String cholesterol = null;
+            String saturatedFA = null;
+            String caffeine = null;
+            String country = null;
+            String mass = null;
+
             boolean isFirstItemProcessed = false; // 첫 번째 아이템 처리 여부 확인 변수
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -491,6 +499,20 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                                     protein = parseToIntString(text) + " g";
                                 } else if ("AMT_NUM4".equals(tagName) && selectedNutritionInfo.contains("지방")) {
                                     fat = parseToIntString(text) + " g";
+                                } else if ("AMT_NUM13".equals(tagName) && selectedNutritionInfo.contains("칼륨")) {
+                                    potassium = parseToIntString(text) + " mg";
+                                } else if ("AMT_NUM14".equals(tagName) && selectedNutritionInfo.contains("나트륨")) {
+                                    sodium = parseToIntString(text) + " mg";
+                                } else if ("AMT_NUM24".equals(tagName) && selectedNutritionInfo.contains("콜레스테롤")) {
+                                    cholesterol = parseToIntString(text) + " mg";
+                                } else if ("AMT_NUM25".equals(tagName) && selectedNutritionInfo.contains("포화지방산")) {
+                                    saturatedFA = parseToIntString(text) + " g";
+                                }  else if ("AMT_NUM121".equals(tagName) && selectedNutritionInfo.contains("카페인")) {
+                                    caffeine = parseToIntString(text) + " mg";
+                                } else if ("Z10500".equals(tagName) && selectedNutritionInfo.contains("질량")) {
+                                    mass = text;
+                                } else if ("NATION_NM".equals(tagName) && selectedNutritionInfo.contains("원산지")) {
+                                    country = parseToIntString(text);
                                 }
                             } catch (NumberFormatException e) {
                                 Log.e("XmlParser", "Error parsing value: " + text, e);
@@ -504,21 +526,65 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                             isFirstItemProcessed = true;
 
                             // SharedPreferences에 저장된 영양정보만 표시
-                            if (selectedNutritionInfo.contains("칼로리") && calories != null) {
-                                nutritionInfo.append("칼로리: ").append(calories).append("\n");
+                            if (selectedNutritionInfo.contains("칼로리")) {
+                                nutritionInfo.append("칼로리: ")
+                                        .append(calories != null ? calories : "알 수 없음")
+                                        .append("\n");
                             }
-                            if (selectedNutritionInfo.contains("탄수화물") && carbohydrates != null) {
-                                nutritionInfo.append("탄수화물: ").append(carbohydrates).append("\n");
+                            if (selectedNutritionInfo.contains("탄수화물")) {
+                                nutritionInfo.append("탄수화물: ")
+                                        .append(carbohydrates != null ? carbohydrates : "알 수 없음")
+                                        .append("\n");
                             }
-                            if (selectedNutritionInfo.contains("단백질") && protein != null) {
-                                nutritionInfo.append("단백질: ").append(protein).append("\n");
+                            if (selectedNutritionInfo.contains("단백질")) {
+                                nutritionInfo.append("단백질: ")
+                                        .append(protein != null ? protein : "알 수 없음")
+                                        .append("\n");
                             }
-                            if (selectedNutritionInfo.contains("지방") && fat != null) {
-                                nutritionInfo.append("지방: ").append(fat).append("\n");
+                            if (selectedNutritionInfo.contains("지방")) {
+                                nutritionInfo.append("지방: ")
+                                        .append(fat != null ? fat : "알 수 없음")
+                                        .append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("칼륨")) {
+                                nutritionInfo.append("칼륨: ")
+                                        .append(potassium != null ? potassium : "알 수 없음")
+                                        .append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("나트륨")) {
+                                nutritionInfo.append("나트륨: ")
+                                        .append(sodium != null ? sodium : "알 수 없음")
+                                        .append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("콜레스테롤")) {
+                                nutritionInfo.append("콜레스테롤: ")
+                                        .append(cholesterol != null ? cholesterol : "알 수 없음")
+                                        .append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("포화지방산")) {
+                                nutritionInfo.append("포화지방산: ")
+                                        .append(saturatedFA != null ? saturatedFA : "알 수 없음")
+                                        .append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("카페인")) {
+                                nutritionInfo.append("카페인: ")
+                                        .append(caffeine != null ? caffeine : "알 수 없음")
+                                        .append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("질량")) {
+                                nutritionInfo.append("질량: ")
+                                        .append(mass != null ? mass : "알 수 없음")
+                                        .append("\n");
+                            }
+                            if (selectedNutritionInfo.contains("원산지")) {
+                                nutritionInfo.append("원산지: ")
+                                        .append(country != null ? country : "알 수 없음")
+                                        .append("\n");
                             }
 
                             // 다음 아이템을 위해 값 초기화
                             foodName = calories = protein = fat = carbohydrates = null;
+                            potassium = sodium = cholesterol = saturatedFA = caffeine = mass = country = null;
                         }
                         break;
                 }
