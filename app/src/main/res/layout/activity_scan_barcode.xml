@@ -3,106 +3,106 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal"
-    android:background="@color/background_light">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal"
+        android:background="@color/background_light">
 
-    <!--햄버거 버튼-->
-    <Button
-        android:id="@+id/openDrawerButton"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:textSize="13sp"
-        android:text="☰ 정보수정"
-        android:layout_gravity="end"
-        />
+        <!--햄버거 버튼-->
+        <Button
+            android:id="@+id/openDrawerButton"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:textSize="13sp"
+            android:text="☰ 정보수정"
+            android:layout_gravity="end"
+            />
 
-    <!-- 큰 제목 텍스트 -->
-    <TextView
-        android:id="@+id/nutritionInforTitle"
-        android:layout_width="270dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:letterSpacing="0.1"
-        android:textSize="35sp"
-        android:textStyle="bold"
-        android:text="제품정보 확인하기"
-        android:textColor="#38332d" />
+        <!-- 큰 제목 텍스트 -->
+        <TextView
+            android:id="@+id/nutritionInforTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:letterSpacing="0.1"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            android:text="제품정보 확인하기"
+            android:textColor="#38332d" />
 
-    <!-- 제목 상세 설명 텍스트 -->
-    <TextView
-        android:id="@+id/nutritionInforMemo"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:letterSpacing="0.1"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="바코드를 스캔하거나 알러지 정보를 확인하세요"
-        />
-
-
-    <!-- 영양정보 텍스트뷰 -->
-    <TextView
-        android:id="@+id/nutritionInfoTextView"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/rounded_background"
-        android:gravity="center"
-        android:padding="12dp"
-        android:text="선택한 영양정보가 여기에 표시됩니다."
-        android:textSize="18sp" />
+        <!-- 제목 상세 설명 텍스트 -->
+        <TextView
+            android:id="@+id/nutritionInforMemo"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:letterSpacing="0.1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="바코드를 스캔하거나 알러지 정보를 확인하세요"
+            />
 
 
-    <!-- 알레르기 정보 텍스트뷰 -->
-    <TextView
-        android:id="@+id/allergyInfoTextView"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text="선택한 알레르기: 없음"
-        android:textSize="18sp"
-        android:padding="12dp"
-        android:background="@drawable/rounded_background"
-        android:gravity="center"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="8dp"/>
-
-    <!-- 바코드 스캔 버튼 -->
-    <Button
-        android:id="@+id/scanButton"
-        android:layout_width="200dp"
-        android:layout_height="65dp"
-        android:text="📷  바코드 스캔"
-        android:textSize="25sp"
-        android:fontFamily="sans-serif-medium"
-        android:padding="12dp"
-        android:backgroundTint="@color/primary"
-        android:textColor="@color/button_text"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/rounded_button_background"
-        />
-
-    <!-- 영양정보 확인 버튼 -->
-    <Button
-        android:id="@+id/scanAllergyButton"
-        android:layout_width="200dp"
-        android:layout_height="65dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_button_background"
-        android:backgroundTint="@color/accent"
-        android:fontFamily="sans-serif-medium"
-        android:padding="12dp"
-        android:text="🚫 알러지 확인"
-        android:textColor="@color/button_text"
-        android:textSize="25sp" />
+        <!-- 영양정보 텍스트뷰 -->
+        <TextView
+            android:id="@+id/nutritionInfoTextView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/rounded_background"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="선택한 영양정보가 여기에 표시됩니다."
+            android:textSize="18sp" />
 
 
-</LinearLayout>
+        <!-- 알레르기 정보 텍스트뷰 -->
+        <TextView
+            android:id="@+id/allergyInfoTextView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="선택한 알레르기: 없음"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:background="@drawable/rounded_background"
+            android:gravity="center"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- 바코드 스캔 버튼 -->
+        <Button
+            android:id="@+id/scanButton"
+            android:layout_width="200dp"
+            android:layout_height="65dp"
+            android:text="📷  바코드 스캔"
+            android:textSize="25sp"
+            android:fontFamily="sans-serif-medium"
+            android:padding="12dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/button_text"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_button_background"
+            />
+
+        <!-- 영양정보 확인 버튼 -->
+        <Button
+            android:id="@+id/scanAllergyButton"
+            android:layout_width="200dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_button_background"
+            android:backgroundTint="@color/accent"
+            android:fontFamily="sans-serif-medium"
+            android:padding="12dp"
+            android:text="🚫 알러지 확인"
+            android:textColor="@color/button_text"
+            android:textSize="25sp" />
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/drawerView"
@@ -131,47 +131,47 @@
             android:layout_marginVertical="8dp" />
 
 
-    <Button
-        android:id="@+id/nutritionEditButton"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="영양정보 수정"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-medium"
-        android:padding="12dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/accent"
-        android:textColor="@color/button_text"
-         />
+        <Button
+            android:id="@+id/nutritionEditButton"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="영양정보 수정"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:padding="12dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/accent"
+            android:textColor="@color/button_text"
+            />
 
-    <!-- 알레르기 수정 버튼 -->
-    <Button
-        android:id="@+id/editAllergyButton"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="알레르기 수정"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-medium"
-        android:padding="12dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/accent"
-        android:textColor="@color/button_text"
-         />
+        <!-- 알레르기 수정 버튼 -->
+        <Button
+            android:id="@+id/editAllergyButton"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="알레르기 수정"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:padding="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/accent"
+            android:textColor="@color/button_text"
+            />
 
-    <!-- 모드 수정 버튼 -->
-    <Button
-        android:id="@+id/editModeButton"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:padding="12dp"
-        android:layout_marginTop="10dp"
-        android:text="모드 수정"
-        android:backgroundTint="@color/accent"
-        android:textColor="@color/button_text"
-        android:textSize="18sp" />
+        <!-- 모드 수정 버튼 -->
+        <Button
+            android:id="@+id/editModeButton"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:padding="12dp"
+            android:layout_marginTop="10dp"
+            android:text="모드 수정"
+            android:backgroundTint="@color/accent"
+            android:textColor="@color/button_text"
+            android:textSize="18sp" />
 
-</LinearLayout>
+    </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

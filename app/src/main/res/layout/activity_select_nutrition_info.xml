@@ -1,8 +1,12 @@
+
+
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@color/background_light">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,7 +56,7 @@
                 android:padding="8dp"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
-                 />
+                />
 
         </LinearLayout>
 
@@ -130,7 +134,7 @@
                 android:id="@+id/checkBox_potassium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="칼륨"
+                android:text=" 칼륨"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:minWidth="48dp"
@@ -150,7 +154,7 @@
                 android:id="@+id/checkBox_sodium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="나트륨"
+                android:text=" 나트륨"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:minWidth="48dp"
@@ -170,7 +174,7 @@
                 android:id="@+id/checkBox_cholesterol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="콜레스테롤"
+                android:text=" 콜레스테롤"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:minWidth="48dp"
@@ -190,7 +194,7 @@
                 android:id="@+id/checkBox_saturatedFattyAcids"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="포화지방산"
+                android:text=" 포화지방산"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:minWidth="48dp"
@@ -210,7 +214,7 @@
                 android:id="@+id/checkBox_caffeine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="카페인"
+                android:text=" 카페인"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:minWidth="48dp"
@@ -230,7 +234,7 @@
                 android:id="@+id/checkBox_mass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="질량"
+                android:text=" 질량"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:minWidth="48dp"
@@ -250,7 +254,7 @@
                 android:id="@+id/checkBox_country"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="원산지"
+                android:text=" 원산지"
                 android:textColor="@color/text_primary"
                 android:textSize="28sp"
                 android:minWidth="48dp"
@@ -266,6 +270,7 @@
             android:text="저장"
             android:textSize="28sp"
             android:background="@drawable/rounded_button_background"
-            android:layout_marginTop="83dp" />
+            android:layout_marginTop="83dp"
+            android:layout_marginBottom="100dp"/>
     </LinearLayout>
 </ScrollView>

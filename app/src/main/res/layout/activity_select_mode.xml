@@ -44,7 +44,7 @@
                 android:id="@+id/voice_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🔊  음성 모드"
+                android:text="📢  음성 모드"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"

@@ -39,7 +39,8 @@ public class SelectModeActivity extends AppCompatActivity {
         checkVisual.setChecked(isVisualMode);
 
 
-        // 하나만 체크되도록 리스너 설정
+        // 하나만 체크되도록 리스너 설정  -> 중복 선택 허용
+        /*
         checkVoice.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 checkBraille.setChecked(false);
@@ -60,7 +61,7 @@ public class SelectModeActivity extends AppCompatActivity {
                 checkBraille.setChecked(false);
             }
         });
-
+        */
         // 버튼 클릭 시 저장
         saveAllergyButton.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();

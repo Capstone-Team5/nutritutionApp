@@ -65,10 +65,23 @@ public class ScanAllergyActivity extends AppCompatActivity {
 
         Button btnIncrease = findViewById(R.id.btnIncrease);
         Button btnDecrease = findViewById(R.id.btnDecrease);
-
+        Button speechButton = findViewById(R.id.speechButton);
+        Button brailleButton = findViewById(R.id.brailleButton);
+/*
         // visualMode 값 확인
         SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
         boolean isVisualMode = sharedPreferences.getBoolean("visualMode", false);
+*/
+        // SharedPreferences에서 모드 값 가져오기
+        SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
+        boolean isVisualMode = sharedPreferences.getBoolean("visualMode", false);
+        boolean isVoiceMode = sharedPreferences.getBoolean("voiceMode", false);
+        boolean isBrailleMode = sharedPreferences.getBoolean("brailleMode", false);
+
+        // 모드별 UI 요소 표시
+        fontControlLayout.setVisibility(isVisualMode ? View.VISIBLE : View.GONE);
+        speechButton.setVisibility(isVoiceMode ? View.VISIBLE : View.GONE);
+        brailleButton.setVisibility(isBrailleMode ? View.VISIBLE : View.GONE);
 
         if (isVisualMode) {
             // 글씨 크게, 버튼 보이기
@@ -93,6 +106,8 @@ public class ScanAllergyActivity extends AppCompatActivity {
 
         // text 출력
         dispatchTakePictureIntent();
+
+
 
     }
 

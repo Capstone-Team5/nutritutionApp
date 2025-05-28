@@ -106,7 +106,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
 
             for (String item : selectedNutritionInfo) {
                 SpannableString boldItem = new SpannableString(item + "\n");
-                nutritionBuilder.append(item).append("\n");
+                nutritionBuilder.append(item).append(", ");
             }
 
             nutritionInfoTextView.setText(nutritionBuilder);
@@ -124,7 +124,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
             allergyBuilder.append("[ 선택한 알레르기 정보 ]\n\n");
 
             for (String item : selectedAllergies) {
-                allergyBuilder.append(item).append("\n");
+                allergyBuilder.append(item).append(", ");
             }
 
             allergyInfoTextView.setText(allergyBuilder);
