@@ -3,73 +3,146 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/background_light"
+    >
 
-    <TextView
-        android:id="@+id/barcodeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="바코드 번호: 없음"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp" />
-
-    <!-- 스크롤 뷰 추가 -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scrollbars="vertical">
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="horizontal">
-
-            <TextView
-                android:id="@+id/nutritionInfoTextView"
-                android:layout_width="wrap_content"
+                <!-- 영양 정보 박스 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:text="선택된 영양정보가 없습니다."
-                android:textSize="16sp" />
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="35dp"
+                android:background="@drawable/rounded_background"
+                android:gravity="center"
+                android:orientation="vertical">
 
-        </HorizontalScrollView>
+                <!-- 제품명 -->
+                <TextView
+                    android:id="@+id/productNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:letterSpacing="0.1"
+                    android:text="영양 성분 정보 확인"
+                    android:textColor="#38332d"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-    </ScrollView>
+                <!-- 바코드 표시 -->
+                <TextView
+                    android:id="@+id/barcodeTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="바코드 번호: 없음"
+                    android:textSize="10sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/fontControlLayout">
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/rounded_background"
+                    android:backgroundTint="#e7e8e3"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        <Button
-            android:id="@+id/btnDecrease"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textSize="30sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="영양 성분"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
 
-        <Button
-            android:id="@+id/btnIncrease"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="+"
-            android:textSize="30sp" />
+                        />
 
-    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="#999591" />
 
-    <Button
-        android:id="@+id/brailleButton"
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:text="점자로 변환" />
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        android:fillViewport="true">
 
-    <Button
-        android:id="@+id/speechButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="음성으로 읽기" />
+                        <TextView
+                            android:id="@+id/nutritionInfoTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="선택된 영양정보가 없습니다."
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="16sp" />
 
-</LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fontControlLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal">
+                    <Button
+                        android:id="@+id/btnIncrease"
+                        android:layout_width="110dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/rounded_background"
+                        android:backgroundTint="#7a4d2d"
+                        android:gravity="center"
+                        android:text="글씨 확대 ( + )"
+                        android:textColor="@color/button_text"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:id="@+id/btnDecrease"
+                        android:layout_width="110dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/rounded_background"
+                        android:backgroundTint="#c49c80"
+                        android:text=" 글씨 축소 ( - )"
+                        android:textColor="@color/button_text"
+                        android:textSize="20sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/brailleButton"
+                android:layout_width="240dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/accent"
+                android:padding="12dp"
+                android:text="🤙🏻 점자로 변환"
+                android:textColor="@color/button_text"
+                android:textSize="23sp" />
+
+            <Button
+                android:id="@+id/speechButton"
+                android:layout_width="240dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/primary"
+                android:padding="12dp"
+                android:text="📢  음성으로 읽기"
+                android:textColor="@color/button_text"
+                android:textSize="23sp" />
+
+        </LinearLayout>

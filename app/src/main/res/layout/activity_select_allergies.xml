@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginStart="10dp"
         android:gravity="center">
 
         <!-- 안내 텍스트 -->
@@ -108,7 +109,7 @@
                 android:id="@+id/checkBox_egg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="달걀"
+                android:text="🍳 달걀"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -118,27 +119,28 @@
         </LinearLayout>
 
         <!-- 체크박스: 호두 -->
+
+        <!-- 체크박스: 아몬드 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:orientation="horizontal"
-            android:padding="8dp"
-            android:layout_marginStart="10dp">
+            android:padding="8dp">
 
             <CheckBox
                 android:id="@+id/checkBox_walnuts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="호두"
+                android:fontFamily="sans-serif"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
+                android:text="🫘 호두"
                 android:textColor="@color/text_primary"
-                android:textSize="28sp"
-                android:fontFamily="sans-serif" />
+                android:textSize="28sp" />
         </LinearLayout>
 
-        <!-- 체크박스: 아몬드 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -150,7 +152,7 @@
                 android:id="@+id/checkBox_almond"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="아몬드"
+                android:text="🌰 아몬드"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -171,7 +173,7 @@
                 android:id="@+id/checkBox_shrimp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="새우"
+                android:text="🍤 새우"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -192,7 +194,7 @@
                 android:id="@+id/checkBox_crab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="게"
+                android:text="🦀 게"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -213,7 +215,7 @@
                 android:id="@+id/checkBox_sesameSeeds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="참깨"
+                android:text="🥣 참깨"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -234,7 +236,7 @@
                 android:id="@+id/checkBox_garlic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="마늘"
+                android:text="🧄 마늘"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -255,7 +257,7 @@
                 android:id="@+id/checkBox_peach"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="복숭아"
+                android:text="🍑 복숭아"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -276,7 +278,7 @@
                 android:id="@+id/checkBox_kiwi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="키위"
+                android:text="🥝 키위"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -297,7 +299,7 @@
                 android:id="@+id/checkBox_apple"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="사과"
+                android:text="🍎 사과"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:padding="8dp"
@@ -314,6 +316,7 @@
             android:text="저장"
             android:textSize="28sp"
             android:background="@drawable/rounded_button_background"
-            android:layout_marginTop="127dp" />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="100dp"/>
     </LinearLayout>
-</ScrollView>
+</ScrollView> 

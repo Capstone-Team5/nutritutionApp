@@ -63,6 +63,41 @@ public class DisplayNutritionActivity extends AppCompatActivity {
         String foodName = getIntent().getStringExtra("foodName");
         String nutritionInfo = getIntent().getStringExtra("nutritionInfo");
 
+        //중복 선택 수정
+        // [MODIFIED] SharedPreferences에서 모드 값들 가져오기
+        SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
+        boolean isVisualMode = sharedPreferences.getBoolean("visualMode", false);
+        boolean isVoiceMode = sharedPreferences.getBoolean("voiceMode", false);
+        boolean isBrailleMode = sharedPreferences.getBoolean("brailleMode", false);
+
+        barcodeTextView.setText(barcode != null && !barcode.isEmpty() ? "바코드: " + barcode : "바코드 정보가 없습니다");
+        nutritionInfoTextView.setText(foodName != null && !foodName.isEmpty() ? "식품명: " + foodName : "식품명이 없습니다");
+        if (nutritionInfo != null && !nutritionInfo.isEmpty()) {
+            nutritionInfoTextView.append("\n" + nutritionInfo);
+        }
+
+// [수정] 모드별 UI 요소 표시 제어
+        fontControlLayout.setVisibility(isVisualMode ? View.VISIBLE : View.GONE);
+        speechButton.setVisibility(isVoiceMode ? View.VISIBLE : View.GONE);
+        brailleButton.setVisibility(isBrailleMode ? View.VISIBLE : View.GONE);
+
+// [수정] 시각화 모드에 한해서 텍스트 확대/축소 기능 활성화
+        if (isVisualMode) {
+            nutritionInfoTextView.setTextSize(28);
+            nutritionInfoTextView.setMovementMethod(new ScrollingMovementMethod());
+
+            btnIncrease.setOnClickListener(v -> {
+                float currentSize = nutritionInfoTextView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                nutritionInfoTextView.setTextSize(currentSize + 2);
+            });
+
+            btnDecrease.setOnClickListener(v -> {
+                float currentSize = nutritionInfoTextView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                if (currentSize > 12) nutritionInfoTextView.setTextSize(currentSize - 2);
+            });
+        }
+
+/*
         //SharedPreferecnes에서 visualMode 조회
         // visualMode 값 확인
         SharedPreferences sharedPreferences = getSharedPreferences("NutritionApp", MODE_PRIVATE);
@@ -95,7 +130,8 @@ public class DisplayNutritionActivity extends AppCompatActivity {
         } else {
             fontControlLayout.setVisibility(View.GONE);
         }
-
+*/
+        //tts 초기화
         tts = new TextToSpeech(this, status -> {
             if (status == TextToSpeech.SUCCESS) {
                 tts.setLanguage(Locale.KOREAN);
@@ -104,6 +140,7 @@ public class DisplayNutritionActivity extends AppCompatActivity {
             }
         });
 
+        //음성 버튼 클릭
         speechButton.setOnClickListener(v -> {
             String text = nutritionInfoTextView.getText().toString();
             if (!text.isEmpty()) {
@@ -113,6 +150,7 @@ public class DisplayNutritionActivity extends AppCompatActivity {
             }
         });
 
+        //점자 버튼 클릭
         brailleButton.setOnClickListener(v -> {
             String textToSend = nutritionInfoTextView.getText().toString().replaceAll(":", "");
             if (!textToSend.isEmpty()) {

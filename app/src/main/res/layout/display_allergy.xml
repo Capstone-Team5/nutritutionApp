@@ -4,53 +4,124 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 스크롤 뷰 추가 -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scrollbars="vertical">
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="horizontal">
-
-            <TextView
-                android:id="@+id/resultTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="이곳에 알러지 포함 여부가 표시됩니다"
-                android:textSize="16sp"/>
-
-        </HorizontalScrollView>
-
-    </ScrollView>
-
+    <!-- 영양 정보 박스 -->
     <LinearLayout
-        android:id="@+id/fontControlLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:layout_marginTop="8dp">
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="32dp"
+        android:gravity="center"
+        android:background="@drawable/rounded_background"
+        >
 
-        <Button
-            android:id="@+id/btnDecrease"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <!-- 제품명 -->
+        <TextView
+            android:id="@+id/productNameTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="-"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:letterSpacing="0.1"
+            android:text="알러지 함유 정보 확인"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#38332d"
+            />
 
-        <Button
-            android:id="@+id/btnIncrease"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+
+        <LinearLayout
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="+"/>
+            android:orientation="vertical"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp"
+            android:padding="16dp"
+            android:gravity="center"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="#e7e8e3"
+            >
+
+                <TextView
+                    android:id="@+id/resultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="이곳에 알러지 포함 여부가 표시됩니다"
+                    android:textSize="16sp" />
+
+
+
+        </LinearLayout>
+
+        <!--글씨 크기 조절-->
+        <LinearLayout
+            android:id="@+id/fontControlLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+
+            >
+
+            <Button
+                android:id="@+id/btnIncrease"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="#7a4d2d"
+                android:text=" 글씨 확대 ( + )"
+                android:textColor="@color/button_text"
+                android:textSize="20sp"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/btnDecrease"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="#c49c80"
+                android:text=" 글씨 축소 ( - )"
+                android:textColor="@color/button_text"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
+
+    <Button
+        android:id="@+id/brailleButton"
+        android:visibility="gone"
+        android:layout_width="200dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="110dp"
+        android:text="🤙🏻 점자로 변환"
+        android:textSize="25sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/accent"
+        android:textColor="@color/button_text"
+        android:background="@drawable/rounded_background"/>
+
+    <Button
+        android:id="@+id/speechButton"
+        android:visibility="gone"
+        android:layout_width="200dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="20dp"
+        android:text="📢  음성으로 읽기"
+        android:textSize="25sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/primary"
+        android:textColor="@color/button_text"
+        android:background="@drawable/rounded_background"/>
+
 </LinearLayout>
+
